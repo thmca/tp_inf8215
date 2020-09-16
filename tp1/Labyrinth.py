@@ -45,9 +45,23 @@ class Labyrinth:
             self.free_pos[venom[0], venom[1]] = False
 
     def check_if_move_in_grid(self, possible_move):
-        if possible_move.x < 0 or possible_move.x > (self.nb_lines - 1) or possible_move.y < 0 or possible_move.y > (self.nb_columns -1):
+
+        # check for y
+        left_min = possible_move.y < 0
+        right_max = possible_move.y > (self.nb_columns - 1)
+
+        # check for x
+        down_max = possible_move.x > (self.nb_lines - 1)
+        up_min = possible_move.x < 0
+
+        if left_min or right_max or down_max or up_min:
             return False
         return True
+
+    def calculate_moves(self, possible_move, d, other_exits, moves):
+        if self.check_if_move_in_grid(possible_move):
+            if self.free_pos[possible_move.x, possible_move.y] and possible_move not in other_exits:
+                moves.append((d,possible_move))
 
     def possible_moves_snail(self, snail_position, exit_position, other_exits):
         moves = []
@@ -60,31 +74,19 @@ class Labyrinth:
 
             movement1 = copy.copy(snail_position)
             movement1.x -= 1
-
-            if self.check_if_move_in_grid(movement1):
-                if self.free_pos[movement1.x, movement1.y] and movement1 not in other_exits:
-                    moves.append((1, movement1))
+            self.calculate_moves(movement1, 1, other_exits, moves)
 
             movement2 = copy.copy(snail_position)
             movement2.y += 1
-
-            if self.check_if_move_in_grid(movement2):
-                if self.free_pos[movement2.x, movement2.y] and movement2 not in other_exits:
-                    moves.append((2, movement2))
+            self.calculate_moves(movement2, 2, other_exits, moves)
 
             movement3 = copy.copy(snail_position)
             movement3.x += 1
-
-            if self.check_if_move_in_grid(movement3):
-                if self.free_pos[movement3.x, movement3.y] and movement3 not in other_exits:
-                    moves.append((3, movement3))
+            self.calculate_moves(movement3, 3, other_exits, moves)
 
             movement4 = copy.copy(snail_position)
             movement4.y -= 1
-
-            if self.check_if_move_in_grid(movement4):
-                if self.free_pos[movement4.x, movement4.y] and movement4 not in other_exits:
-                    moves.append((4, movement4))
+            self.calculate_moves(movement4, 4, other_exits, moves)
 
         return moves
 
