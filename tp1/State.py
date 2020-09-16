@@ -2,19 +2,17 @@ import numpy as np
 import copy
 
 
-def changePosition(pos, d):
-    snailPosition = pos
-
+def change_position(snail_position, d):
     if d == 1:
-        snailPosition.x -= 1
+        snail_position.x -= 1
     elif d == 2:
-        snailPosition.y += 1
+        snail_position.y += 1
     elif d == 3:
-        snailPosition.x += 1
+        snail_position.x += 1
     elif d == 4:
-        snailPosition.y -= 1
+        snail_position.y -= 1
 
-    return snailPosition
+    return snail_position
 
 
 class State:
@@ -59,7 +57,7 @@ class State:
             if d_snail != 0:
                 temp_pos = (pos_snail.x, pos_snail.y)
                 newState.venoms.add(temp_pos)
-                new_pos = changePosition(pos_snail, d_snail)
+                new_pos = change_position(pos_snail, d_snail)
                 newState.pos[i] = new_pos
 
         return newState
