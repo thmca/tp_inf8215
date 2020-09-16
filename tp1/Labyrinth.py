@@ -3,6 +3,8 @@ import heapq
 import time
 from IPython.display import clear_output
 import matplotlib.pyplot as plt
+import numpy as np
+import copy
 import itertools
 
 
@@ -52,7 +54,7 @@ class Labyrinth:
             moves.append((0, snail_position))
 
             movement1 = copy.copy(snail_position)
-            movement1.y -= 1
+            movement1.x -= 1
 
             if self.free_pos[movement1.x, movement1.y] and movement1 not in other_exits:
                 moves.append((1, movement1))
@@ -64,13 +66,13 @@ class Labyrinth:
                 moves.append((2, movement2))
 
             movement3 = copy.copy(snail_position)
-            movement3.y += 1
+            movement3.x += 1
 
             if self.free_pos[movement3.x, movement3.y] and movement3 not in other_exits:
                 moves.append((3, movement3))
 
             movement4 = copy.copy(snail_position)
-            movement4.x -= 1
+            movement4.y -= 1
 
             if self.free_pos[movement4.x, movement4.y] and movement4 not in other_exits:
                 moves.append((4, movement4))

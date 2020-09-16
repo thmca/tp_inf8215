@@ -129,7 +129,7 @@ def test4():
     print("\n", "résultat correct" if b else "mauvais résultat", "\n")
 
 
-test1()
+# test1()
 # test2()
 # test3()
-# test4()
+test4()
