@@ -44,6 +44,11 @@ class Labyrinth:
         for venom in state.venoms:
             self.free_pos[venom[0], venom[1]] = False
 
+    def check_if_move_in_grid(self, possible_move):
+        if possible_move.x < 0 or possible_move.x > (self.nb_lines - 1) or possible_move.y < 0 or possible_move.y > (self.nb_columns -1):
+            return False
+        return True
+
     def possible_moves_snail(self, snail_position, exit_position, other_exits):
         moves = []
         # TODO
@@ -56,26 +61,30 @@ class Labyrinth:
             movement1 = copy.copy(snail_position)
             movement1.x -= 1
 
-            if self.free_pos[movement1.x, movement1.y] and movement1 not in other_exits:
-                moves.append((1, movement1))
+            if self.check_if_move_in_grid(movement1):
+                if self.free_pos[movement1.x, movement1.y] and movement1 not in other_exits:
+                    moves.append((1, movement1))
 
             movement2 = copy.copy(snail_position)
             movement2.y += 1
 
-            if self.free_pos[movement2.x, movement2.y] and movement2 not in other_exits:
-                moves.append((2, movement2))
+            if self.check_if_move_in_grid(movement2):
+                if self.free_pos[movement2.x, movement2.y] and movement2 not in other_exits:
+                    moves.append((2, movement2))
 
             movement3 = copy.copy(snail_position)
             movement3.x += 1
 
-            if self.free_pos[movement3.x, movement3.y] and movement3 not in other_exits:
-                moves.append((3, movement3))
+            if self.check_if_move_in_grid(movement3):
+                if self.free_pos[movement3.x, movement3.y] and movement3 not in other_exits:
+                    moves.append((3, movement3))
 
             movement4 = copy.copy(snail_position)
             movement4.y -= 1
 
-            if self.free_pos[movement4.x, movement4.y] and movement4 not in other_exits:
-                moves.append((4, movement4))
+            if self.check_if_move_in_grid(movement4):
+                if self.free_pos[movement4.x, movement4.y] and movement4 not in other_exits:
+                    moves.append((4, movement4))
 
         return moves
 
