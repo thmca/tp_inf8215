@@ -102,7 +102,14 @@ class Labyrinth:
             other_exits = copy.copy(self.exits)
             other_exits.pop(i)
             snail_moves.append(self.possible_moves_snail(state.pos[i], self.exits[i], other_exits))
-        print(len(list(itertools.product(*snail_moves))))
+        for move in list(itertools.product(*snail_moves)):
+            for i in range(len(move)-1):
+                print(move[i][1])
+                print(move[i+1][1])
+
+                print("snaill")
+        # print(list(itertools.product(*snail_moves)))
+        # print(len(list(itertools.product(*snail_moves))))
 
 
         # for i in range(len(state.pos)):
