@@ -5,6 +5,7 @@ from IPython.display import clear_output
 import matplotlib.pyplot as plt
 import numpy as np
 import copy
+from Position import Position
 import itertools
 
 
@@ -44,6 +45,7 @@ class Labyrinth:
         for venom in state.venoms:
             self.free_pos[venom[0], venom[1]] = False
 
+    # THIS FUNCTION HAS BEEN CREATED BY US
     def check_if_move_in_grid(self, possible_move):
 
         # check for y
@@ -58,10 +60,11 @@ class Labyrinth:
             return False
         return True
 
+    # THIS FUNCTION HAS BEEN CREATED BY US
     def calculate_moves(self, possible_move, d, other_exits, moves):
         if self.check_if_move_in_grid(possible_move):
             if self.free_pos[possible_move.x, possible_move.y] and possible_move not in other_exits:
-                moves.append((d,possible_move))
+                moves.append((d, possible_move))
 
     def possible_moves_snail(self, snail_position, exit_position, other_exits):
         moves = []
@@ -93,7 +96,18 @@ class Labyrinth:
     def possible_moves(self, state):
         self.init_positions(state)
         new_states = []
+        snail_moves = []
         # TODO
+        for i in range(len(state.pos)):
+            other_exits = copy.copy(self.exits)
+            other_exits.pop(i)
+            snail_moves.append(self.possible_moves_snail(state.pos[i], self.exits[i], other_exits))
+        print(len(list(itertools.product(*snail_moves))))
+
+
+        # for i in range(len(state.pos)):
+        #     print(self.possible_moves_snail(state.pos[i], self.exits[i], self.exits.remove(self.exits[i])))
+
         return new_states
 
     def solve(self, state):
