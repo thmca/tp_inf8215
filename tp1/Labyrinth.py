@@ -105,21 +105,22 @@ class Labyrinth:
             other_exits.pop(i)
             snail_moves.append(self.possible_moves_snail(state.pos[i], self.exits[i], other_exits))
         possible_list = list(itertools.product(*snail_moves))
+        final_list = copy.copy(possible_list)
         for move in possible_list:
             count = 0
             positions = []
             for i in range(len(move)):
                 if move[i][1] in positions:
-                    possible_list.remove(move)
+                    final_list.remove(move)
                     break
                 else:
                     positions.append(move[i][1])
                 if move[i][1] == state.pos[i]:
                     count += 1
                 if count == len(state.pos):
-                    possible_list.remove(move)
-        print(possible_list)
-        print(len(possible_list))
+                    final_list.remove(move)
+        # print(possible_list)
+        print(len(final_list))
 
         return new_states
 
