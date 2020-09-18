@@ -5,9 +5,16 @@ from IPython.display import clear_output
 import matplotlib.pyplot as plt
 import numpy as np
 import copy
-from Position import Position
-from State import State
 import itertools
+
+
+def format_states(final_moves, new_states, state):
+
+    for move in final_moves:
+        d = []
+        for i in range(len(move)):
+            d.append(move[i][0])
+        new_states.append(state.move(d))
 
 
 class Labyrinth:
@@ -98,29 +105,29 @@ class Labyrinth:
         self.init_positions(state)
         new_states = []
         snail_moves = []
-
         # TODO
         for i in range(len(state.pos)):
             other_exits = copy.copy(self.exits)
             other_exits.pop(i)
             snail_moves.append(self.possible_moves_snail(state.pos[i], self.exits[i], other_exits))
-        possible_list = list(itertools.product(*snail_moves))
-        final_list = copy.copy(possible_list)
-        for move in possible_list:
+
+        possible_moves = list(itertools.product(*snail_moves))
+        final_moves = copy.copy(possible_moves)
+        for move in possible_moves:
             count = 0
             positions = []
             for i in range(len(move)):
                 if move[i][1] in positions:
-                    final_list.remove(move)
+                    final_moves.remove(move)
                     break
                 else:
                     positions.append(move[i][1])
                 if move[i][1] == state.pos[i]:
                     count += 1
-                if count == len(state.pos):
-                    final_list.remove(move)
-        # print(possible_list)
-        print(len(final_list))
+            if count == len(state.pos):
+                final_moves.remove(move)
+
+        format_states(final_moves, new_states, state)
 
         return new_states
 
