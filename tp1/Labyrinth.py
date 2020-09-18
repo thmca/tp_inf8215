@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import copy
 from Position import Position
+from State import State
 import itertools
 
 
@@ -97,17 +98,23 @@ class Labyrinth:
         self.init_positions(state)
         new_states = []
         snail_moves = []
+        positions = []
         # TODO
         for i in range(len(state.pos)):
             other_exits = copy.copy(self.exits)
             other_exits.pop(i)
             snail_moves.append(self.possible_moves_snail(state.pos[i], self.exits[i], other_exits))
-        for move in list(itertools.product(*snail_moves)):
-            for i in range(len(move)-1):
-                print(move[i][1])
-                print(move[i+1][1])
-
-                print("snaill")
+        possible_list = list(itertools.product(*snail_moves))
+        for move in possible_list:
+            count = 0
+            print(move)
+            for i in range(len(move)):
+                if move[i][1] == state.pos[i]:
+                    count += 1
+                if count == len(state.pos):
+                    possible_list.remove(move)
+        print(len(possible_list))
+        # print(len(possible_list))
         # print(list(itertools.product(*snail_moves)))
         # print(len(list(itertools.product(*snail_moves))))
 

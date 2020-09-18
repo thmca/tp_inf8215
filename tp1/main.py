@@ -116,7 +116,6 @@ def test4():
     s3 = State([Position(3, 5), Position(4, 4), Position(1, 4)])
     l1 = len(lb.possible_moves(s))
     print(l1)
-    print("Nexttttt test")
     b = b and l1 == 11
     l2 = len(lb.possible_moves(s2))
     print(l2)
