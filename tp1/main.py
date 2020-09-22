@@ -129,6 +129,12 @@ def test4():
     b = b and l3 == 35
     print("\n", "résultat correct" if b else "mauvais résultat", "\n")
 
+def notreTest():
+    lb = Labyrinth(4, 4,
+                   [Position(0, 1), Position(2, 2)],
+                   [])
+    s0 = State([Position(1, 1), Position(2, 1)])
+    s = lb.solve(s0)
 
 def solve7():
     lb = Labyrinth(4, 4,
@@ -167,7 +173,8 @@ def solve12():
 #test3()
 #test4()
 
-solve7()
+notreTest()
+#solve7()
 #solve9()
 print("\n")
 #solve12()

@@ -86,19 +86,19 @@ class Labyrinth:
         else:
             moves.append((0, snail_position))
 
-            movement1 = copy.copy(snail_position)
+            movement1 = copy.deepcopy(snail_position)
             movement1.x -= 1
             self.calculate_moves(movement1, 1, other_exits, moves)
 
-            movement2 = copy.copy(snail_position)
+            movement2 = copy.deepcopy(snail_position)
             movement2.y += 1
             self.calculate_moves(movement2, 2, other_exits, moves)
 
-            movement3 = copy.copy(snail_position)
+            movement3 = copy.deepcopy(snail_position)
             movement3.x += 1
             self.calculate_moves(movement3, 3, other_exits, moves)
 
-            movement4 = copy.copy(snail_position)
+            movement4 = copy.deepcopy(snail_position)
             movement4.y -= 1
             self.calculate_moves(movement4, 4, other_exits, moves)
 
@@ -109,12 +109,12 @@ class Labyrinth:
         snail_moves = []
         # TODO
         for i in range(len(state.pos)):
-            other_exits = copy.copy(self.exits)
+            other_exits = copy.deepcopy(self.exits)
             other_exits.pop(i)
             snail_moves.append(self.possible_moves_snail(state.pos[i], self.exits[i], other_exits))
 
         possible_moves = list(itertools.product(*snail_moves))
-        final_moves = copy.copy(possible_moves)
+        final_moves = copy.deepcopy(possible_moves)
         for move in possible_moves:
             count = 0
             positions = []
@@ -135,7 +135,11 @@ class Labyrinth:
 
 
     def isFinalState(self, state):
-        return (state.pos == self.exits).all()
+        print(state.pos[0] == self.exits[0])
+        print(state.pos[1] == self.exits[1])
+        print("\n")
+
+        return (state.pos[0] == self.exits[0] and state.pos[1] == self.exits[1])
 
     def solve(self, state):
         to_visit = set()
@@ -146,7 +150,8 @@ class Labyrinth:
         solution = state
 
         while fifo:
-            s = fifo.popleft()
+            s = copy.deepcopy(fifo.popleft())
+            to_visit.add(s)
 
             if not self.isFinalState(s):
                 next_states = self.possible_moves(s)
