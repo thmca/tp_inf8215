@@ -8,13 +8,16 @@ import copy
 import itertools
 
 
-def format_states(final_moves, new_states, state):
+def format_states(final_moves, state):
+    new_states = []
 
     for move in final_moves:
         d = []
         for i in range(len(move)):
             d.append(move[i][0])
-        new_states.append(state.move(d))
+        fake_state = copy.deepcopy(state)
+        new_states.append(fake_state.move(d))
+    return new_states
 
 
 class Labyrinth:
@@ -103,7 +106,6 @@ class Labyrinth:
 
     def possible_moves(self, state):
         self.init_positions(state)
-        new_states = []
         snail_moves = []
         # TODO
         for i in range(len(state.pos)):
@@ -112,7 +114,6 @@ class Labyrinth:
             snail_moves.append(self.possible_moves_snail(state.pos[i], self.exits[i], other_exits))
 
         possible_moves = list(itertools.product(*snail_moves))
-        print(possible_moves);
         final_moves = copy.copy(possible_moves)
         for move in possible_moves:
             count = 0
@@ -128,7 +129,7 @@ class Labyrinth:
             if count == len(state.pos):
                 final_moves.remove(move)
 
-        format_states(final_moves, new_states, state)
+        new_states = format_states(final_moves, state)
 
         return new_states
 
@@ -139,15 +140,13 @@ class Labyrinth:
     def solve(self, state):
         to_visit = set()
         fifo = deque([state])
-        padres = deque([1000])
         to_visit.add(state)
         # TODO
 
-        solution = deque([])
+        solution = state
 
         while fifo:
             s = fifo.popleft()
-            to_visit.add(s)
 
             if not self.isFinalState(s):
                 next_states = self.possible_moves(s)
@@ -155,10 +154,19 @@ class Labyrinth:
                     if next not in to_visit:
                         fifo.append(next)
             else:
-                solution.appendleft(s)
-                prev = s.prev
+                solution = s
+                break;
 
-        return None
+        previous = solution.prev
+
+        path = []
+
+        while previous is not state:
+            path.append(previous)
+            previous = previous.prev
+
+        print(len(path))
+        return path
 
     """
     Estimation du nombre de coup restants 
