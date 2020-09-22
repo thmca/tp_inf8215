@@ -1,7 +1,7 @@
 from Position import Position
 from State import State
 from Labyrinth import Labyrinth
-import time
+
 
 
 def test1():
@@ -135,8 +135,8 @@ def solve7():
                    [Position(2, 3), Position(1, 2), Position(0, 0)],
                    [])
     s0 = State([Position(1, 1), Position(2, 1), Position(1, 3)])
-    s = %time lb.solve(s0)
-    lb.print_solution(s)
+    s = lb.solve(s0)
+    #lb.print_solution(s)
 
 
 #     Si vous voulez visualiser les résultats, décommenter la ligne ci-dessous.
@@ -147,8 +147,8 @@ def solve9():
                     [Position(3,4), Position(1,3)],
                     [])
     s0 = State([Position(2,0), Position(3,0)])
-    s = %time lb.solve(s0)
-    lb.print_solution(s)
+    #s = %time lb.solve(s0)
+    #lb.print_solution(s)
 #     Si vous voulez visualiser les résultats, décommenter la ligne ci-dessous.
 #     lb.print_labyrinth(s, show_all=True)
 
@@ -157,17 +157,17 @@ def solve12():
                 [Position(0,4), Position(0,6)],
                 [Position(0,3), Position(1,3), Position(2,3), Position(2,2), Position(2,4)])
     s0 = State([Position(0,0), Position(3,0)])
-    s = %time lb.solve(s0)
-    lb.print_solution(s)
+    #s = %time lb.solve(s0)
+    #lb.print_solution(s)
 #     Si vous voulez visualiser les résultats, décommenter la ligne ci-dessous.
 #     lb.print_labyrinth(s, show_all=True)
 
-test1()
-test2()
-test3()
-test4()
+#test1()
+#test2()
+#test3()
+#test4()
 
 solve7()
-solve9()
+#solve9()
 print("\n")
-solve12()
+#solve12()

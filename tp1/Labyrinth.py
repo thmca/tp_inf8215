@@ -1,7 +1,7 @@
 from collections import deque
 import heapq
 import time
-from IPython.display import clear_output
+from IPython.display import clear_output, display
 import matplotlib.pyplot as plt
 import numpy as np
 import copy
@@ -112,6 +112,7 @@ class Labyrinth:
             snail_moves.append(self.possible_moves_snail(state.pos[i], self.exits[i], other_exits))
 
         possible_moves = list(itertools.product(*snail_moves))
+        print(possible_moves);
         final_moves = copy.copy(possible_moves)
         for move in possible_moves:
             count = 0
@@ -131,11 +132,31 @@ class Labyrinth:
 
         return new_states
 
+
+    def isFinalState(self, state):
+        return (state.pos == self.exits).all()
+
     def solve(self, state):
         to_visit = set()
         fifo = deque([state])
+        padres = deque([1000])
         to_visit.add(state)
         # TODO
+
+        solution = deque([])
+
+        while fifo:
+            s = fifo.popleft()
+            to_visit.add(s)
+
+            if not self.isFinalState(s):
+                next_states = self.possible_moves(s)
+                for next in next_states:
+                    if next not in to_visit:
+                        fifo.append(next)
+            else:
+                solution.appendleft(s)
+                prev = s.prev
 
         return None
 
