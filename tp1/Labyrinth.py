@@ -139,7 +139,7 @@ class Labyrinth:
         print(state.pos[1] == self.exits[1])
         print("\n")
 
-        return (state.pos[0] == self.exits[0] and state.pos[1] == self.exits[1])
+        return (state.pos[0] == self.exits[0] and state.pos[1] == self.exits[1] and state.pos[2] == self.exits[2])
 
     def solve(self, state):
         to_visit = set()
@@ -159,19 +159,11 @@ class Labyrinth:
                     if next not in to_visit:
                         fifo.append(next)
             else:
+                print("Yessss")
                 solution = s
                 break;
 
-        previous = solution.prev
-
-        path = []
-
-        while previous is not state:
-            path.append(previous)
-            previous = previous.prev
-
-        print(len(path))
-        return path
+        return solution
 
     """
     Estimation du nombre de coup restants 
@@ -198,6 +190,14 @@ class Labyrinth:
 
     def print_solution(self, state):
         # TODO
+        previous = state.prev
+        path_states = []
+        path_states.append(state)
+        while previous is not None:
+            path_states.append(previous)
+            previous = copy.deepcopy(previous.prev)
+
+        print(len(path_states))
         return 0
 
     def print_labyrinth(self, state, show_all=True):
