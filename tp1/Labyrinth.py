@@ -133,14 +133,13 @@ class Labyrinth:
 
         return new_states
 
-
     def isFinalState(self, state):
         print(state.pos[0] == self.exits[0])
         print(state.pos[1] == self.exits[1])
         print("\n")
 
         return (state.pos[0] == self.exits[0] and state.pos[1] == self.exits[1] and state.pos[2] == self.exits[2])
-        # return(state.pos[0] == self.exits[0] and state.pos[1] == self.exits[1])
+        # return (state.pos[0] == self.exits[0] and state.pos[1] == self.exits[1])
 
     def solve(self, state):
         to_visit = set()
@@ -160,7 +159,6 @@ class Labyrinth:
                     if next not in to_visit:
                         fifo.append(next)
             else:
-                print("Yessss")
                 solution = s
                 break;
 
@@ -192,14 +190,37 @@ class Labyrinth:
     def print_solution(self, state):
         # TODO
         previous = state.prev
-        path_states = []
-        path_states.append(state)
-        while previous is not None:
+        path_states = deque([state])
+        while previous.prev is not None:
             path_states.append(previous)
             previous = copy.deepcopy(previous.prev)
 
-        print(len(path_states-1))
-        return 0
+        alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
+                    'U', 'V', 'W', 'X', 'Y', 'Z']
+
+        for state in path_states:
+            count = 0
+            move_string = ""
+            for i in range(len(state.d)):
+                if state.d[i] == 0:
+                    deplacement = "le centre"
+                elif state.d[i] == 1:
+                    deplacement = "le haut"
+                elif state.d[i] == 2:
+                    deplacement = "la droite"
+                elif state.d[i] == 3:
+                    deplacement = "le bas"
+                else:
+                    deplacement = "la gauche"
+
+                if i == len(state.d)-1:
+                    ponctuation = '.'
+                else:
+                    ponctuation = ','
+
+                move_string += "{0}. Escargot {1} vers {2}{3} ".format(i+1,alphabet[count], deplacement, ponctuation)
+                count += 1
+            print(move_string)
 
     def print_labyrinth(self, state, show_all=True):
 
