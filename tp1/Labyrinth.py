@@ -140,6 +140,7 @@ class Labyrinth:
         print("\n")
 
         return (state.pos[0] == self.exits[0] and state.pos[1] == self.exits[1] and state.pos[2] == self.exits[2])
+        # return(state.pos[0] == self.exits[0] and state.pos[1] == self.exits[1])
 
     def solve(self, state):
         to_visit = set()
@@ -197,7 +198,7 @@ class Labyrinth:
             path_states.append(previous)
             previous = copy.deepcopy(previous.prev)
 
-        print(len(path_states))
+        print(len(path_states-1))
         return 0
 
     def print_labyrinth(self, state, show_all=True):

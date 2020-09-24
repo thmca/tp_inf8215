@@ -46,7 +46,7 @@ class State:
         # TODO
 
         newState = self
-        newState.prev = self
+        newState.prev = copy.deepcopy(self)
         newState.d = d
 
         for i in range(len(d)):

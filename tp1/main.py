@@ -131,10 +131,11 @@ def test4():
 
 def notreTest():
     lb = Labyrinth(4, 4,
-                   [Position(1, 3), Position(2, 3)],
+                   [Position(0, 3), Position(3, 3)],
                    [])
-    s0 = State([Position(1, 1), Position(2, 1)])
+    s0 = State([Position(0, 0), Position(3, 0)])
     s = lb.solve(s0)
+    lb.print_solution(s)
 
 def solve7():
     lb = Labyrinth(4, 4,
