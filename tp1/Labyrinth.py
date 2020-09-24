@@ -20,6 +20,29 @@ def format_states(final_moves, state):
     return new_states
 
 
+def prepare_string(index, count, state):
+
+    alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
+                'U', 'V', 'W', 'X', 'Y', 'Z']
+    if state.d[index] == 0:
+        direction = "le centre"
+    elif state.d[index] == 1:
+        direction = "le haut"
+    elif state.d[index] == 2:
+        direction = "la droite"
+    elif state.d[index] == 3:
+        direction = "le bas"
+    else:
+        direction = "la gauche"
+
+    if index == len(state.d) - 1:
+        punctuation = '.'
+    else:
+        punctuation = ', '
+
+    return "Escargot {0} vers {1}{2}".format(alphabet[count], direction, punctuation)
+
+
 class Labyrinth:
 
     def __init__(self, lines, columns, exits, walls):
@@ -138,8 +161,8 @@ class Labyrinth:
         print(state.pos[1] == self.exits[1])
         print("\n")
 
-        return (state.pos[0] == self.exits[0] and state.pos[1] == self.exits[1] and state.pos[2] == self.exits[2])
-        # return (state.pos[0] == self.exits[0] and state.pos[1] == self.exits[1])
+        # return (state.pos[0] == self.exits[0] and state.pos[1] == self.exits[1] and state.pos[2] == self.exits[2])
+        return (state.pos[0] == self.exits[0] and state.pos[1] == self.exits[1])
 
     def solve(self, state):
         to_visit = set()
@@ -191,34 +214,17 @@ class Labyrinth:
         # TODO
         previous = state.prev
         path_states = deque([state])
+
         while previous.prev is not None:
             path_states.append(previous)
             previous = copy.deepcopy(previous.prev)
-
-        alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
-                    'U', 'V', 'W', 'X', 'Y', 'Z']
-
-        for state in path_states:
+        index = 0
+        for s in path_states:
+            index += 1
             count = 0
-            move_string = ""
-            for i in range(len(state.d)):
-                if state.d[i] == 0:
-                    deplacement = "le centre"
-                elif state.d[i] == 1:
-                    deplacement = "le haut"
-                elif state.d[i] == 2:
-                    deplacement = "la droite"
-                elif state.d[i] == 3:
-                    deplacement = "le bas"
-                else:
-                    deplacement = "la gauche"
-
-                if i == len(state.d)-1:
-                    ponctuation = '.'
-                else:
-                    ponctuation = ','
-
-                move_string += "{0}. Escargot {1} vers {2}{3} ".format(i+1,alphabet[count], deplacement, ponctuation)
+            move_string = "{0}. ".format(index)
+            for i in range(len(s.d)):
+                move_string += prepare_string(i, count, s)
                 count += 1
             print(move_string)
 
