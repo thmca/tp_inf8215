@@ -108,7 +108,7 @@ class Labyrinth:
         if snail_position == exit_position:
             moves.append((0, snail_position))
         else:
-            moves.append((0, snail_position))
+            # moves.append((0, snail_position))
 
             movement1 = copy.deepcopy(snail_position)
             movement1.x -= 1
