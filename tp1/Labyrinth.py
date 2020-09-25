@@ -185,7 +185,7 @@ class Labyrinth:
         for i in range(len(state.pos)):
             snail_distance.append(state.pos[i].distance(self.exits[i]))
 
-        return snail_distance
+        return max(snail_distance)
 
     def estimee2(self, state):
         # TODO
