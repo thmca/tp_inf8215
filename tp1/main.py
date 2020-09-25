@@ -15,7 +15,6 @@ def test1():
     print(s1 == s1.prev)
     b = b and s1 == s1.prev
     s1 = s1.move([3, 3]).move([4, 4]).move([1, 1])
-    print(s1.venoms)
     s2 = s0.move([3, 3]).move([2, 2]).move([1, 1]).move([0, 0]).move([4, 4])
     print(s1 == s2)
     b = b and s1 == s2
@@ -169,13 +168,13 @@ def solve12():
 #     Si vous voulez visualiser les résultats, décommenter la ligne ci-dessous.
 #     lb.print_labyrinth(s, show_all=True)
 
-test1()
+# test1()
 #test2()
 #test3()
 # test4()
 
 # notreTest()
-# solve7()
+solve7()
 # solve9()
 print("\n")
 #solve12()

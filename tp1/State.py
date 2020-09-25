@@ -51,7 +51,7 @@ class State:
 
         for i in range(len(d)):
 
-            pos_snail = self.pos[i]
+            pos_snail = newState.pos[i]
             d_snail = d[i]
 
             if d_snail != 0:
