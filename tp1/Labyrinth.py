@@ -8,6 +8,7 @@ import copy
 import itertools
 
 
+# THIS FUNCTION HAS BEEN CREATED BY US
 def format_states(final_moves, state):
     new_states = []
 
@@ -20,8 +21,8 @@ def format_states(final_moves, state):
     return new_states
 
 
+# THIS FUNCTION HAS BEEN CREATED BY US
 def prepare_string(index, count, state):
-
     alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
                 'U', 'V', 'W', 'X', 'Y', 'Z']
     if state.d[index] == 0:
@@ -93,7 +94,6 @@ class Labyrinth:
 
         return not (left_min or right_max or down_max or up_min)
 
-
     # THIS FUNCTION HAS BEEN CREATED BY US
     def calculate_moves(self, possible_move, d, other_exits, moves):
         if self.check_if_move_in_grid(possible_move):
@@ -107,7 +107,6 @@ class Labyrinth:
         if snail_position == exit_position:
             moves.append((0, snail_position))
         else:
-            # moves.append((0, snail_position))
 
             movement1 = copy.deepcopy(snail_position)
             movement1.x -= 1
@@ -124,6 +123,8 @@ class Labyrinth:
             movement4 = copy.deepcopy(snail_position)
             movement4.y -= 1
             self.calculate_moves(movement4, 4, other_exits, moves)
+
+            moves.append((0, snail_position))
 
         return moves
 
@@ -155,11 +156,6 @@ class Labyrinth:
         new_states = format_states(final_moves, state)
 
         return new_states
-
-    def isFinalState(self, state):
-
-        # return (state.pos[0] == self.exits[0] and state.pos[1] == self.exits[1] and state.pos[2] == self.exits[2])
-        return (state.pos[0] == self.exits[0] and state.pos[1] == self.exits[1])
 
     def solve(self, state):
         to_visit = set()
@@ -213,7 +209,7 @@ class Labyrinth:
         path_states = deque([state])
 
         while previous.prev is not None:
-            path_states.append(previous)
+            path_states.appendleft(previous)
             previous = copy.deepcopy(previous.prev)
         index = 0
         for s in path_states:
