@@ -169,13 +169,13 @@ def solve12():
 #     Si vous voulez visualiser les résultats, décommenter la ligne ci-dessous.
 #     lb.print_labyrinth(s, show_all=True)
 
-#test1()
+test1()
 #test2()
 #test3()
 # test4()
 
 # notreTest()
-solve7()
+# solve7()
 # solve9()
 print("\n")
 #solve12()

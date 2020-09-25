@@ -45,7 +45,7 @@ class State:
     def move(self, d):
         # TODO
 
-        newState = self
+        newState = copy.deepcopy(self)
         newState.prev = copy.deepcopy(self)
         newState.d = d
 
