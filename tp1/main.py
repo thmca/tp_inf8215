@@ -133,6 +133,7 @@ def notreTest():
                    [Position(0, 3), Position(3, 3)],
                    [])
     s0 = State([Position(0, 0), Position(3, 0)])
+    print(lb.estimee1(s0))
     s = lb.solve(s0)
     lb.print_solution(s)
 
@@ -173,8 +174,8 @@ def solve12():
 #test3()
 # test4()
 
-# notreTest()
-solve7()
+notreTest()
+# solve7()
 # solve9()
 print("\n")
 #solve12()

@@ -181,7 +181,11 @@ class Labyrinth:
 
     def estimee1(self, state):
         # TODO
-        return 0
+        snail_distance = []
+        for i in range(len(state.pos)):
+            snail_distance.append(state.pos[i].distance(self.exits[i]))
+
+        return snail_distance
 
     def estimee2(self, state):
         # TODO
