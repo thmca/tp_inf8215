@@ -163,22 +163,17 @@ class Labyrinth:
         to_visit.add(state)
         # TODO
 
-        solution = state
-
         while fifo:
             s = copy.deepcopy(fifo.popleft())
-            to_visit.add(s)
-
             if not self.success(s):
                 next_states = self.possible_moves(s)
                 for next in next_states:
                     if next not in to_visit:
                         fifo.append(next)
+                        to_visit.add(next)
             else:
-                solution = s
-                break;
-
-        return solution
+                break
+        return s
 
     """
     Estimation du nombre de coup restants 
