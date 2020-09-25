@@ -91,9 +91,8 @@ class Labyrinth:
         down_max = possible_move.x > (self.nb_lines - 1)
         up_min = possible_move.x < 0
 
-        if left_min or right_max or down_max or up_min:
-            return False
-        return True
+        return not (left_min or right_max or down_max or up_min)
+
 
     # THIS FUNCTION HAS BEEN CREATED BY US
     def calculate_moves(self, possible_move, d, other_exits, moves):
