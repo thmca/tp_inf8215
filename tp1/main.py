@@ -174,8 +174,8 @@ def solve12():
 #test3()
 #test4()
 
-notreTest()
-# solve7()
+# notreTest()
+solve7()
 # solve9()
 print("\n")
 #solve12()

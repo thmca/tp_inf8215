@@ -57,14 +57,15 @@ class Labyrinth:
 
     def success(self, state):
         # TODO
-        for i in range(len(state.d)):
-            snail_pos = state.pos[i]
-            exit_pos = self.exits[i]
+        if state.prev is not None:
+            count = 0
+            for i in range(len(state.d)):
+                if state.pos[i] == self.exits[i]:
+                    count += 1
 
-        if snail_pos.x != exit_pos.x or snail_pos.y != exit_pos.y:
-            return False
+            return count == len(state.d)
 
-        return True
+        return False
 
     def init_positions(self, state):
         self.free_pos = np.ones((self.nb_lines, self.nb_columns), dtype=bool)
@@ -157,9 +158,6 @@ class Labyrinth:
         return new_states
 
     def isFinalState(self, state):
-        print(state.pos[0] == self.exits[0])
-        print(state.pos[1] == self.exits[1])
-        print("\n")
 
         # return (state.pos[0] == self.exits[0] and state.pos[1] == self.exits[1] and state.pos[2] == self.exits[2])
         return (state.pos[0] == self.exits[0] and state.pos[1] == self.exits[1])
@@ -176,7 +174,7 @@ class Labyrinth:
             s = copy.deepcopy(fifo.popleft())
             to_visit.add(s)
 
-            if not self.isFinalState(s):
+            if not self.success(s):
                 next_states = self.possible_moves(s)
                 for next in next_states:
                     if next not in to_visit:
