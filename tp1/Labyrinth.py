@@ -158,6 +158,7 @@ class Labyrinth:
         return new_states
 
     def solve(self, state):
+        nb_visited_states = 0
         to_visit = set()
         fifo = deque([state])
         to_visit.add(state)
@@ -171,7 +172,9 @@ class Labyrinth:
                     if next not in to_visit:
                         fifo.append(next)
                         to_visit.add(next)
+                        nb_visited_states = nb_visited_states + 1;
             else:
+                print("Number of visited states with solve: " + str(nb_visited_states))
                 break
         return s
 
@@ -191,12 +194,8 @@ class Labyrinth:
         # TODO
         return 0
 
-    def get_nb_moves(self, state):
-
-        # needs to change for returning fcost
-        return state.nb_moves
-
     def solve_Astar(self, state):
+        nb_visited_states = 0
         to_visit = set()
         to_visit.add(state)
 
@@ -208,15 +207,14 @@ class Labyrinth:
 
         while priority_queue:
 
-            # Sorting priority queue to get the smallest fcost every time
-            priority_queue.sort(key=self.get_nb_moves)
-
             # Getting next smallest path state
-            s = priority_queue.pop(0)
+            s = heapq.heappop(priority_queue)
+            nb_visited_states = nb_visited_states + 1;
             to_visit.add(s)
 
             # Check if state is final
             if self.success(s):
+                print("Number of visited states with A*: " + str(nb_visited_states))
                 return s
             else:
                 next_states = self.possible_moves(s)
@@ -225,8 +223,8 @@ class Labyrinth:
                     if next not in to_visit:
                         next.nb_moves = s.nb_moves + 1
                         next.h = self.estimee1(next)
-                        fcost = next.nb_moves + next.h
                         if next not in priority_queue:
+                            #This calls the __lt__ function in State so queue is ordered with fcost
                             heapq.heappush(priority_queue, next)
 
 

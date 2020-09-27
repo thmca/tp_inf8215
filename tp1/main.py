@@ -146,6 +146,9 @@ def solve7():
     s = lb.solve(s0)
     lb.print_solution(s)
 
+    sAstar = lb.solve_Astar(s0)
+    lb.print_solution(sAstar)
+
 
 #     Si vous voulez visualiser les résultats, décommenter la ligne ci-dessous.
 #     lb.print_labyrinth(s, show_all=True)
@@ -155,7 +158,13 @@ def solve9():
                     [Position(3,4), Position(1,3)],
                     [])
     s0 = State([Position(2,0), Position(3,0)])
+
     s = lb.solve(s0)
+    lb.print_solution(s)
+
+    sAstar = lb.solve_Astar(s0)
+    lb.print_solution(sAstar)
+    #s = lb.solve(s0)
     #lb.print_solution(s)
 #     Si vous voulez visualiser les résultats, décommenter la ligne ci-dessous.
 #     lb.print_labyrinth(s, show_all=True)
@@ -167,6 +176,8 @@ def solve12():
     s0 = State([Position(0,0), Position(3,0)])
     #s = %time lb.solve(s0)
     #lb.print_solution(s)
+    sAstar = lb.solve_Astar(s0)
+    lb.print_solution(sAstar)
 #     Si vous voulez visualiser les résultats, décommenter la ligne ci-dessous.
 #     lb.print_labyrinth(s, show_all=True)
 
@@ -175,8 +186,8 @@ def solve12():
 #test3()
 # test4()
 
-notreTest()
-# solve7()
-# solve9()
+#notreTest()
+solve7()
+solve9()
 print("\n")
-#solve12()
+solve12()
