@@ -134,8 +134,9 @@ def notreTest():
                    [])
     s0 = State([Position(0, 0), Position(3, 0)])
     print(lb.estimee1(s0))
-    s = lb.solve(s0)
-    lb.print_solution(s)
+    #s = lb.solve(s0)
+    s2 = lb.solve_Astar(s0)
+    #lb.print_solution(s)
 
 def solve7():
     lb = Labyrinth(4, 4,
