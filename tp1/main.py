@@ -130,15 +130,6 @@ def test4():
     b = b and l3 == 35
     print("\n", "résultat correct" if b else "mauvais résultat", "\n")
 
-def notreTest():
-    lb = Labyrinth(4, 4,
-                   [Position(0, 3), Position(3, 3)],
-                   [])
-    s0 = State([Position(0, 0), Position(3, 0)])
-    print(lb.estimee1(s0))
-    #s = lb.solve(s0)
-    s2 = lb.solve_Astar(s0)
-    #lb.print_solution(s)
 
 def solve7():
     lb = Labyrinth(4, 4,
