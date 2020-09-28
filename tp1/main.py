@@ -1,3 +1,5 @@
+import copy
+
 from Position import Position
 from State import State
 from Labyrinth import Labyrinth
@@ -146,8 +148,8 @@ def solve7():
     s = lb.solve(s0)
     lb.print_solution(s)
 
-    sAstar = lb.solve_Astar(s0)
-    lb.print_solution(sAstar)
+    # sAstar = lb.solve_Astar(s0)
+    # lb.print_solution(sAstar)
 
 
 #     Si vous voulez visualiser les résultats, décommenter la ligne ci-dessous.
@@ -181,13 +183,13 @@ def solve12():
 #     Si vous voulez visualiser les résultats, décommenter la ligne ci-dessous.
 #     lb.print_labyrinth(s, show_all=True)
 
-# test1()
-#test2()
-#test3()
-# test4()
+test1()
+test2()
+test3()
+test4()
 
 #notreTest()
 solve7()
-solve9()
+# solve9()
 print("\n")
-solve12()
+# solve12()

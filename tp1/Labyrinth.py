@@ -9,6 +9,9 @@ import itertools
 
 
 # THIS FUNCTION HAS BEEN CREATED BY US
+from Position import Position
+
+
 def format_states(final_moves, state):
     new_states = []
 
@@ -108,20 +111,16 @@ class Labyrinth:
             moves.append((0, snail_position))
         else:
 
-            movement1 = copy.deepcopy(snail_position)
-            movement1.x -= 1
+            movement1 = Position(snail_position.x - 1, snail_position.y)
             self.calculate_moves(movement1, 1, other_exits, moves)
 
-            movement2 = copy.deepcopy(snail_position)
-            movement2.y += 1
+            movement2 = Position(snail_position.x, snail_position.y + 1)
             self.calculate_moves(movement2, 2, other_exits, moves)
 
-            movement3 = copy.deepcopy(snail_position)
-            movement3.x += 1
+            movement3 = Position(snail_position.x + 1, snail_position.y)
             self.calculate_moves(movement3, 3, other_exits, moves)
 
-            movement4 = copy.deepcopy(snail_position)
-            movement4.y -= 1
+            movement4 = Position(snail_position.x, snail_position.y - 1)
             self.calculate_moves(movement4, 4, other_exits, moves)
 
             moves.append((0, snail_position))
@@ -132,7 +131,9 @@ class Labyrinth:
         self.init_positions(state)
         snail_moves = []
         # TODO
+
         for i in range(len(state.pos)):
+
             other_exits = copy.deepcopy(self.exits)
             other_exits.pop(i)
             snail_moves.append(self.possible_moves_snail(state.pos[i], self.exits[i], other_exits))
@@ -165,7 +166,8 @@ class Labyrinth:
         # TODO
 
         while fifo:
-            s = copy.deepcopy(fifo.popleft())
+            # ici etait : copy.deepcopy(fifo.popleft())
+            s = fifo.popleft()
             if not self.success(s):
                 next_states = self.possible_moves(s)
                 for next in next_states:
@@ -237,7 +239,8 @@ class Labyrinth:
 
         while previous.prev is not None:
             path_states.appendleft(previous)
-            previous = copy.deepcopy(previous.prev)
+            # ICI ETAIT : previous = copy.deepcopy(previous.prev)
+            previous = previous.prev
         index = 0
         for s in path_states:
             index += 1
