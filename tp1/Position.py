@@ -9,6 +9,9 @@ class Position:
     def distance(self, other):
         return math.fabs(other.x - self.x) + math.fabs(other.y - self.y)
 
+    def pythagor(self, other):
+        return math.sqrt(math.pow(other.x - self.x, 2) + math.pow(other.y - self.y, 2))
+
     def __eq__(self, other):
         return self.x == other.x and self.y == other.y
 

@@ -6,12 +6,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 import copy
 import itertools
+import math
 
-
-# THIS FUNCTION HAS BEEN CREATED BY US
 from Position import Position
 
-
+# THIS FUNCTION HAS BEEN CREATED BY US
 def format_states(final_moves, state):
     new_states = []
 
@@ -110,16 +109,19 @@ class Labyrinth:
         if snail_position == exit_position:
             moves.append((0, snail_position))
         else:
-
+            # Haut
             movement1 = Position(snail_position.x - 1, snail_position.y)
             self.calculate_moves(movement1, 1, other_exits, moves)
 
+            # Droite
             movement2 = Position(snail_position.x, snail_position.y + 1)
             self.calculate_moves(movement2, 2, other_exits, moves)
 
+            # Bas
             movement3 = Position(snail_position.x + 1, snail_position.y)
             self.calculate_moves(movement3, 3, other_exits, moves)
 
+            # Gauche
             movement4 = Position(snail_position.x, snail_position.y - 1)
             self.calculate_moves(movement4, 4, other_exits, moves)
 
@@ -137,6 +139,7 @@ class Labyrinth:
             other_exits = copy.deepcopy(self.exits)
             other_exits.pop(i)
             snail_moves.append(self.possible_moves_snail(state.pos[i], self.exits[i], other_exits))
+
 
         possible_moves = list(itertools.product(*snail_moves))
         final_moves = copy.deepcopy(possible_moves)
@@ -194,15 +197,39 @@ class Labyrinth:
 
     def estimee2(self, state):
         # TODO
-        return 0
+        costs = []
+
+        for i in range(len(state.pos)):
+            cost = 0
+            xDist = int(math.fabs(state.pos[i].x - self.exits[i].x))
+            yDist = int(math.fabs(state.pos[i].y - self.exits[i].y))
+
+            xmin = int(min(state.pos[i].x, self.exits[i].x))
+            ymin = int(min(state.pos[i].y, self.exits[i].y))
+
+            rangex = 0 if 0 >= xDist + xmin -1 else xDist + xmin -1
+            rangey = 0 if 0 >= yDist + ymin -1 else yDist + ymin -1
+
+            #for j in range(xmin, xDist + xmin - 1):
+                #for k in range(ymin, yDist + ymin - 1):
+
+            for j in range(xmin, rangex):
+                for k in range(ymin, rangey):
+                    if not self.free_pos[k][j]:
+                        cost = cost + 1
+
+            costs.append(cost)
+
+        return self.estimee1(state) + max(costs)
 
     def solve_Astar(self, state):
+        self.init_positions(state)
         nb_visited_states = 0
         to_visit = set()
         to_visit.add(state)
 
         priority_queue = []
-        state.h = self.estimee1(state)
+        state.h = self.estimee2(state)
 
         heapq.heappush(priority_queue, state)
         # TODO
@@ -221,15 +248,11 @@ class Labyrinth:
             else:
                 next_states = self.possible_moves(s)
                 for next in next_states:
-
                     if next not in to_visit:
-                        next.nb_moves = s.nb_moves + 1
-                        next.h = self.estimee1(next)
+                        next.h = self.estimee2(next)
                         if next not in priority_queue:
                             #This calls the __lt__ function in State so queue is ordered with fcost
                             heapq.heappush(priority_queue, next)
-
-
         return None
 
     def print_solution(self, state):

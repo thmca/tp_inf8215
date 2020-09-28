@@ -44,7 +44,7 @@ class State:
 
     def move(self, d):
         # TODO
-
+        #newState = State(self.pos)
         newState = copy.deepcopy(self)
         newState.prev = self
         newState.d = d
@@ -59,7 +59,7 @@ class State:
                 newState.venoms.add(temp_pos)
                 new_pos = change_position(pos_snail, d_snail)
                 newState.pos[i] = new_pos
-                # newState.nb_moves += 1
+        newState.nb_moves += 1
 
         return newState
 

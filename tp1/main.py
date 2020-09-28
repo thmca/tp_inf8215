@@ -138,9 +138,13 @@ def solve7():
     s0 = State([Position(1, 1), Position(2, 1), Position(1, 3)])
     s = lb.solve(s0)
     lb.print_solution(s)
+    print(s.pos)
 
-    # sAstar = lb.solve_Astar(s0)
-    # lb.print_solution(sAstar)
+    sAstar = lb.solve_Astar(s0)
+    lb.print_solution(sAstar)
+    print(sAstar.pos)
+
+
 
 
 #     Si vous voulez visualiser les résultats, décommenter la ligne ci-dessous.
@@ -152,8 +156,8 @@ def solve9():
                     [])
     s0 = State([Position(2,0), Position(3,0)])
 
-    s = lb.solve(s0)
-    lb.print_solution(s)
+    #s = lb.solve(s0)
+    #lb.print_solution(s)
 
     sAstar = lb.solve_Astar(s0)
     lb.print_solution(sAstar)
@@ -180,7 +184,7 @@ test3()
 test4()
 
 #notreTest()
-solve7()
-# solve9()
+#solve7()
+solve9()
 print("\n")
-# solve12()
+#solve12()
