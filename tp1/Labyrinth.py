@@ -197,30 +197,29 @@ class Labyrinth:
 
     def estimee2(self, state):
         # TODO
-        costs = []
-
+        maxEstimee1 = self.estimee1(state)
+        snail_distance = []
+        
         for i in range(len(state.pos)):
-            cost = 0
+            costObstacles = 0
+
             xDist = int(math.fabs(state.pos[i].x - self.exits[i].x))
             yDist = int(math.fabs(state.pos[i].y - self.exits[i].y))
 
             xmin = int(min(state.pos[i].x, self.exits[i].x))
             ymin = int(min(state.pos[i].y, self.exits[i].y))
 
-            rangex = 0 if 0 >= xDist + xmin -1 else xDist + xmin -1
-            rangey = 0 if 0 >= yDist + ymin -1 else yDist + ymin -1
+            for j in range(xmin, xDist + xmin):
+                if not self.free_pos[j][state.pos[i].y] or not self.free_pos[j][self.exits[i].y]:
+                    costObstacles = costObstacles + 1
 
-            #for j in range(xmin, xDist + xmin - 1):
-                #for k in range(ymin, yDist + ymin - 1):
+            for k in range(ymin, yDist + ymin):
+                if not self.free_pos[state.pos[i].x][k] or not self.free_pos[self.exits[i].x][k]:
+                    costObstacles = costObstacles + 1
 
-            for j in range(xmin, rangex):
-                for k in range(ymin, rangey):
-                    if not self.free_pos[k][j]:
-                        cost = cost + 1
+            snail_distance.append(costObstacles)
 
-            costs.append(cost)
-
-        return self.estimee1(state) + max(costs)
+        return maxEstimee1 + max(snail_distance)
 
     def solve_Astar(self, state):
         self.init_positions(state)
