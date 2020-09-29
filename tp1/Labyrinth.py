@@ -140,24 +140,28 @@ class Labyrinth:
             other_exits.pop(i)
             snail_moves.append(self.possible_moves_snail(state.pos[i], self.exits[i], other_exits))
 
-
         possible_moves = list(itertools.product(*snail_moves))
-        final_moves = copy.deepcopy(possible_moves)
+
+        impossible_moves = []
+
         for move in possible_moves:
             count = 0
             positions = []
             for i in range(len(move)):
                 if move[i][1] in positions:
-                    final_moves.remove(move)
+                    impossible_moves.append(move)
                     break
                 else:
                     positions.append(move[i][1])
                 if move[i][1] == state.pos[i]:
                     count += 1
             if count == len(state.pos):
-                final_moves.remove(move)
+                impossible_moves.append(move)
 
-        new_states = format_states(final_moves, state)
+        for impossible_move in impossible_moves:
+            possible_moves.remove(impossible_move)
+
+        new_states = format_states(possible_moves, state)
 
         return new_states
 
@@ -199,7 +203,7 @@ class Labyrinth:
         # TODO
         maxEstimee1 = self.estimee1(state)
         snail_distance = []
-        
+
         for i in range(len(state.pos)):
             costObstacles = 0
 
