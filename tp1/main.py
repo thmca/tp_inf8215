@@ -172,7 +172,7 @@ def solve12():
                 [Position(0,3), Position(1,3), Position(2,3), Position(2,2), Position(2,4)])
     s0 = State([Position(0,0), Position(3,0)])
     #s = %time lb.solve(s0)
-    #lb.print_solution(s)
+    # lb.print_solution(s)
     sAstar = lb.solve_Astar(s0)
     lb.print_solution(sAstar)
 #     Si vous voulez visualiser les résultats, décommenter la ligne ci-dessous.

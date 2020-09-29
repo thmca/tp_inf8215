@@ -215,11 +215,11 @@ class Labyrinth:
 
             for j in range(xmin, xDist + xmin):
                 if not self.free_pos[j][state.pos[i].y] or not self.free_pos[j][self.exits[i].y]:
-                    costObstacles = costObstacles + 1
+                    costObstacles += 1
 
             for k in range(ymin, yDist + ymin):
                 if not self.free_pos[state.pos[i].x][k] or not self.free_pos[self.exits[i].x][k]:
-                    costObstacles = costObstacles + 1
+                    costObstacles += 1
 
             snail_distance.append(costObstacles)
 
