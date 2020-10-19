@@ -56,15 +56,25 @@ class Solve:
 
                 for j in range(self.n_device):
                     if assigned_generators[j] == i:
-                        gen_index = range(self.n_generator)
-                        gen_index = gen_index[:i-1] + gen_index[i+1:]
-                        closest_generator = min(gen_index,
-                                                key=lambda k: self.instance.get_distance(self.instance.device_coordinates[j][0],
-                                                                                         self.instance.device_coordinates[j][1],
-                                                                                         self.instance.generator_coordinates[k][0],
-                                                                                         self.instance.generator_coordinates[k][1])
-                                                )
+                        # gen_index = range(self.n_generator)
+                        # gen_index[:] = [ j for j in enumerate(gen_index) if j != i ]
+                        # closest_generator = min(range(self.n_generator),
+                        #                         key=lambda k: self.instance.get_distance(self.instance.device_coordinates[j][0],
+                        #                                                                  self.instance.device_coordinates[j][1],
+                        #                                                                  self.instance.generator_coordinates[k][0],
+                        #                                                                  self.instance.generator_coordinates[k][1])
+                        #                         )
+                        generators_distances = []
+                        for j in range(self.n_device):
+                            for k in range(self.n_generator):
+                                if k != i:
+                                    generators_distances.append(((self.instance.get_distance(self.instance.device_coordinates[j][0],
+                                                                                             self.instance.device_coordinates[j][1],
+                                                                                             self.instance.generator_coordinates[k][0],
+                                                                                             self.instance.generator_coordinates[k][1])
+                                                                ),k))
 
+                        closest_generator = min(generators_distances)[1]
                         assigned_generators[j] = closest_generator
                 cost = self.instance.get_solution_cost(best_assigned_generators, best_opened_generators)
 
