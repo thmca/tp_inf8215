@@ -48,11 +48,13 @@ class Solve:
         temp_opened_generators = best_opened_generators.copy()
         temp_cost = best_cost
 
-        for iterations in range(10):
+        for iterations in range(1000):
             for i in range(self.n_generator):
                 assigned_generators = best_assigned_generators.copy()
                 opened_generators = best_opened_generators.copy()
-                opened_generators[i] = 0
+
+                # if generator is closed, we open it and if t is opened we close it
+                opened_generators[i] = int(opened_generators[i] == 0)
 
                 for j in range(self.n_device):
                     if assigned_generators[j] == i:
@@ -74,7 +76,8 @@ class Solve:
                     temp_opened_generators = opened_generators.copy()
                     temp_cost = cost
 
-                opened_generators[i] = 1
+                #switch back
+                opened_generators[i] = int(opened_generators[i] == 0)
 
             best_assigned_generators = temp_assigned_generators.copy()
             best_opened_generators = temp_opened_generators.copy()
