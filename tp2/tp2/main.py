@@ -1,3 +1,5 @@
+import math
+import time
 
 from solve import Solve
 
@@ -15,6 +17,8 @@ def parse_arguments():
     return parser.parse_args()
 
 
+start = time.time()
+
 if __name__ == '__main__':
 
     args = parse_arguments()
@@ -28,4 +32,28 @@ if __name__ == '__main__':
 
     solveur = Solve(args.n_generator, args.n_device, args.seed)
 
-    solveur.solve()
+    # Solution initiale avec les noeuds assignes a la centrale la plus proche et iterations sur les centrales sans composante aleatoire, 500 iterations
+    best_assigned_generators, best_opened_generators, best_cost = solveur.solve(100, False, False)
+
+    # Solution initiale avec les noeuds assignes a la centrale la plus proche et iterations sur les centrales avec composante aleatoire, 5000 iterations
+    for restart in range(25):
+        random_assigned_generators, random_opened_generators, random_cost = solveur.solve(1000, True, False)
+        if random_cost < best_cost:
+            best_assigned_generators, best_opened_generators, best_cost = random_assigned_generators, random_opened_generators, random_cost
+
+
+    # Solution initiale aleatoire et iterations sur les centrales avec composante aleatoire, 5000 iterations
+    for restart in range(25):
+        random_assigned_generators, random_opened_generators, random_cost = solveur.solve(5000, True, True)
+        if random_cost < best_cost:
+            best_assigned_generators, best_opened_generators, best_cost = random_assigned_generators, random_opened_generators, random_cost
+
+    solveur.instance.solution_checker(best_assigned_generators, best_opened_generators)
+    solveur.instance.plot_solution(best_assigned_generators, best_opened_generators)
+    print("[ASSIGNED-GENERATOR]", best_assigned_generators)
+    print("[OPENED-GENERATOR]", best_opened_generators)
+    print("[SOLUTION-COST]", best_cost)
+
+end = time.time()
+elapsed = end-start
+print("Executioon time : ", str(math.floor(elapsed/60)) + ":" + str(format(elapsed % 60, '.2f')))
