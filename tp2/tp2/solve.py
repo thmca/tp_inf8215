@@ -61,20 +61,21 @@ class Solve:
                 assigned_generators = best_assigned_generators.copy()
                 opened_generators = best_opened_generators.copy()
 
-                # ouvrir le generateur concerne s'il est ferme et le fermer s<il est ouvert
+                # ouvrir le generateur concerne s'il est ferme et le fermer s'il est ouvert
                 opened_generators[i] = int(opened_generators[i] == 0)
+                if sum(opened_generators) == 0:
+                    return best_assigned_generators, best_opened_generators, best_cost
 
                 for j in range(self.n_device):
                     if assigned_generators[j] == i:
                         generators_indexes = [a for a, x in enumerate(opened_generators) if x == 1]
-                        if len(generators_indexes) != 0:
-                            closest_generator = min(generators_indexes,
-                                                    key=lambda k: self.instance.get_distance(
-                                                        self.instance.device_coordinates[j][0],
-                                                        self.instance.device_coordinates[j][1],
-                                                        self.instance.generator_coordinates[k][0],
-                                                        self.instance.generator_coordinates[k][1])
-                                                    )
+                        closest_generator = min(generators_indexes,
+                                                key=lambda k: self.instance.get_distance(
+                                                    self.instance.device_coordinates[j][0],
+                                                    self.instance.device_coordinates[j][1],
+                                                    self.instance.generator_coordinates[k][0],
+                                                    self.instance.generator_coordinates[k][1])
+                                                )
 
                         assigned_generators[j] = closest_generator
 
@@ -98,5 +99,8 @@ class Solve:
             best_cost = temp_cost
 
         self.instance.solution_checker(best_assigned_generators, best_opened_generators)
+        print("[ASSIGNED-GENERATOR]", best_assigned_generators)
+        print("[OPENED-GENERATOR]", best_opened_generators)
+        print("[SOLUTION-COST]", best_cost)
 
         return best_assigned_generators, best_opened_generators, best_cost
