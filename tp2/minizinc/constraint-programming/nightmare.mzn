@@ -33,25 +33,11 @@ constraint forall(j in 1..n)(alldifferent(i in 1..n)(city[i, j]));
 constraint forall(j in 1..n)(alldifferent(i in 1..n)(city[j, i]));
 
 %On regarde le nombre de building pour lesquel il y a aucun building plus grand apres lui
-
-
 constraint forall(x in 1..n)(
   right_vision[x]==sum(i in 1..n)(right_vision_check(x,i))
   /\ left_vision[x]==sum(i in 1..n)(left_vision_check(x,i))
   /\ down_vision[x]==sum(i in 1..n)(down_vision_check(x,i))
   /\ up_vision[x]==sum(i in 1..n)(up_vision_check(x,i)));
-
-
-%constraint forall(x in 1..n)(left_vision[x]==sum(i in 1..n)(left_vision_check(x,i)));
-
-
-%constraint forall(x in 1..n)(down_vision[x]==sum(i in 1..n)(down_vision_check(x,i)));
-
-
-%constraint forall(x in 1..n)(up_vision[x]==sum(i in 1..n)(up_vision_check(x,i)));
-
-
-
 
 output
 ["city:"]++

@@ -25,9 +25,7 @@ var int: sum_mines;
 constraint forall(i in 1..n) (sum(j in 1..n) (x[i,j]) == sum_mines);
 constraint forall(i in 1..n) (sum(j in 1..n) (x[j,i]) == sum_mines);
 
-array[int] of var int:row1 = [x[1,i] | i in 1..n];
-array[int] of var int:column2 = [x[2,i] | i in 1..n];
-
+%Ensure that all rows and cols are different
 constraint forall(i,j in 1..n where i != j )(row(x,i)!=row(x,j) /\ col(x,i)!=col(x,j));
 
  
