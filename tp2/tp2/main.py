@@ -34,12 +34,12 @@ if __name__ == '__main__':
     loopCounter = 0
 
     # Solution initiale avec les noeuds assignes a la centrale la plus proche et iterations sur les centrales sans composante aleatoire, 500 iterations
-    best_assigned_generators, best_opened_generators, best_cost = solveur.solve(100, False, False)
+    best_assigned_generators, best_opened_generators, best_cost = solveur.solve(False, False)
 
     # Solution initiale avec les noeuds assignes a la centrale la plus proche et iterations sur les centrales avec composante aleatoire, 5000 iterations
     while True:
         loopCounter += 1
-        random_assigned_generators, random_opened_generators, random_cost = solveur.solve(1000, True, False)
+        random_assigned_generators, random_opened_generators, random_cost = solveur.solve(True, False)
         if random_cost < best_cost:
             best_assigned_generators, best_opened_generators, best_cost = random_assigned_generators, random_opened_generators, random_cost
         if time.time() - start >= 140:
@@ -52,7 +52,7 @@ if __name__ == '__main__':
     # Solution initiale aleatoire et iterations sur les centrales avec composante aleatoire, 5000 iterations
     while True:
         loopCounter += 1
-        random_assigned_generators, random_opened_generators, random_cost = solveur.solve(5000, True, True)
+        random_assigned_generators, random_opened_generators, random_cost = solveur.solve(True, True)
         if random_cost < best_cost:
             best_assigned_generators, best_opened_generators, best_cost = random_assigned_generators, random_opened_generators, random_cost
         if time.time() - start >= 280:

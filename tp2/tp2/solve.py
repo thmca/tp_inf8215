@@ -44,14 +44,19 @@ class Solve:
 
         return opened_generators, assigned_generators, total_cost
 
-    def solve(self, iterations, randomizeDecision, randomizeInitialSolution):
+    def solve(self, randomizeDecision, randomizeInitialSolution):
         # solution initiale
         best_opened_generators, best_assigned_generators, best_cost = self.solve_random() if randomizeInitialSolution else self.solve_naive()
         temp_assigned_generators = best_assigned_generators.copy()
         temp_opened_generators = best_opened_generators.copy()
         temp_cost = best_cost
 
-        for iteration in range(iterations):
+        worseSolutions = 0
+
+        while True:
+            if worseSolutions == 25:
+                break
+            worseSolutions= 0
             for i in range(self.n_generator):
                 assigned_generators = best_assigned_generators.copy()
                 opened_generators = best_opened_generators.copy()
@@ -62,23 +67,28 @@ class Solve:
                 for j in range(self.n_device):
                     if assigned_generators[j] == i:
                         generators_indexes = [a for a, x in enumerate(opened_generators) if x == 1]
-                        closest_generator = min(generators_indexes,
-                                                key=lambda k: self.instance.get_distance(
-                                                    self.instance.device_coordinates[j][0],
-                                                    self.instance.device_coordinates[j][1],
-                                                    self.instance.generator_coordinates[k][0],
-                                                    self.instance.generator_coordinates[k][1])
-                                                )
+                        if len(generators_indexes) != 0:
+                            closest_generator = min(generators_indexes,
+                                                    key=lambda k: self.instance.get_distance(
+                                                        self.instance.device_coordinates[j][0],
+                                                        self.instance.device_coordinates[j][1],
+                                                        self.instance.generator_coordinates[k][0],
+                                                        self.instance.generator_coordinates[k][1])
+                                                    )
 
                         assigned_generators[j] = closest_generator
 
                 cost = self.instance.get_solution_cost(assigned_generators, opened_generators)
 
                 randomDecision = bool(random.randint(0, 1)) if randomizeDecision else True
-                if (cost <= temp_cost) and randomDecision:
-                    temp_assigned_generators = assigned_generators.copy()
-                    temp_opened_generators = opened_generators.copy()
-                    temp_cost = cost
+
+                if (cost < temp_cost):
+                    if randomDecision:
+                        temp_assigned_generators = assigned_generators.copy()
+                        temp_opened_generators = opened_generators.copy()
+                        temp_cost = cost
+                else:
+                    worseSolutions += 1
 
                 # switch back
                 opened_generators[i] = int(opened_generators[i] == 0)
