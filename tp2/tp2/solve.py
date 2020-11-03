@@ -99,8 +99,5 @@ class Solve:
             best_cost = temp_cost
 
         self.instance.solution_checker(best_assigned_generators, best_opened_generators)
-        print("[ASSIGNED-GENERATOR]", best_assigned_generators)
-        print("[OPENED-GENERATOR]", best_opened_generators)
-        print("[SOLUTION-COST]", best_cost)
 
         return best_assigned_generators, best_opened_generators, best_cost

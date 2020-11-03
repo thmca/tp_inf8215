@@ -31,45 +31,42 @@ if __name__ == '__main__':
     print("***********************************************************")
 
     solveur = Solve(args.n_generator, args.n_device, args.seed)
-    while True :
-        solveur.solve(True, True)
-        solveur.solve(True, False)
-#     loopCounter = 0
-#
-#     # Solution initiale avec les noeuds assignes a la centrale la plus proche et iterations sur les centrales sans composante aleatoire, 500 iterations
-#     best_assigned_generators, best_opened_generators, best_cost = solveur.solve(False, False)
-#
-#     # Solution initiale avec les noeuds assignes a la centrale la plus proche et iterations sur les centrales avec composante aleatoire, 5000 iterations
-#     while True:
-#         loopCounter += 1
-#         random_assigned_generators, random_opened_generators, random_cost = solveur.solve(True, False)
-#         if random_cost < best_cost:
-#             best_assigned_generators, best_opened_generators, best_cost = random_assigned_generators, random_opened_generators, random_cost
-#         if time.time() - start >= 140:
-#             print("iterations avec solution initiale naive et decisions aleatoires : ", loopCounter)
-#             loopCounter = 0
-#             break
-#
-#
-#
-#     # Solution initiale aleatoire et iterations sur les centrales avec composante aleatoire, 5000 iterations
-#     while True:
-#         loopCounter += 1
-#         random_assigned_generators, random_opened_generators, random_cost = solveur.solve(True, True)
-#         if random_cost < best_cost:
-#             best_assigned_generators, best_opened_generators, best_cost = random_assigned_generators, random_opened_generators, random_cost
-#         if time.time() - start >= 280:
-#             print("iterations avec solution initiale aleatoire et decisions aleatoires : ", loopCounter)
-#             loopCounter = 0
-#             break
-#
-#
-#     solveur.instance.solution_checker(best_assigned_generators, best_opened_generators)
-#     solveur.instance.plot_solution(best_assigned_generators, best_opened_generators)
-#     print("[ASSIGNED-GENERATOR]", best_assigned_generators)
-#     print("[OPENED-GENERATOR]", best_opened_generators)
-#     print("[SOLUTION-COST]", best_cost)
-#
-# end = time.time()
-# elapsed = end-start
-# print("Executioon time : ", str(math.floor(elapsed/60)) + ":" + str(format(elapsed % 60, '.2f')))
+    loopCounter = 0
+
+    # Solution initiale avec les noeuds assignes a la centrale la plus proche et iterations sur les centrales sans composante aleatoire, 500 iterations
+    best_assigned_generators, best_opened_generators, best_cost = solveur.solve(False, False)
+
+    # Solution initiale avec les noeuds assignes a la centrale la plus proche et iterations sur les centrales avec composante aleatoire, 5000 iterations
+    while True:
+        loopCounter += 1
+        random_assigned_generators, random_opened_generators, random_cost = solveur.solve(True, False)
+        if random_cost < best_cost:
+            best_assigned_generators, best_opened_generators, best_cost = random_assigned_generators, random_opened_generators, random_cost
+        if time.time() - start >= 140:
+            print("iterations avec solution initiale naive et decisions aleatoires : ", loopCounter)
+            loopCounter = 0
+            break
+
+
+
+    # Solution initiale aleatoire et iterations sur les centrales avec composante aleatoire, 5000 iterations
+    while True:
+        loopCounter += 1
+        random_assigned_generators, random_opened_generators, random_cost = solveur.solve(True, True)
+        if random_cost < best_cost:
+            best_assigned_generators, best_opened_generators, best_cost = random_assigned_generators, random_opened_generators, random_cost
+        if time.time() - start >= 280:
+            print("iterations avec solution initiale aleatoire et decisions aleatoires : ", loopCounter)
+            loopCounter = 0
+            break
+
+
+    solveur.instance.solution_checker(best_assigned_generators, best_opened_generators)
+    solveur.instance.plot_solution(best_assigned_generators, best_opened_generators)
+    print("[ASSIGNED-GENERATOR]", best_assigned_generators)
+    print("[OPENED-GENERATOR]", best_opened_generators)
+    print("[SOLUTION-COST]", best_cost)
+
+end = time.time()
+elapsed = end-start
+print("Executioon time : ", str(math.floor(elapsed/60)) + ":" + str(format(elapsed % 60, '.2f')))
