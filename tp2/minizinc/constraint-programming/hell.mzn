@@ -20,8 +20,6 @@ int: max_y = sum(n in 1..n_object)(shape[n,2]);
 constraint end_x <= max_x /\ end_y <= max_y;
 
 constraint forall(n in 1..n_object)(shape[n,1]+shape_offset_x[n] <= end_x /\ shape[n,2]+shape_offset_y[n] <= end_y);
-%constraint forall(n in 1..n_object)(shape[n,2]+shape_offset_y[n] <= end_y);
-
 
 constraint forall(n in 1..n_object)(forall(i in 1..shape[n,1])(forall(j in 1..shape[n,2])( 
   n = room[i + shape_offset_x[n],j+shape_offset_y[n]])));
