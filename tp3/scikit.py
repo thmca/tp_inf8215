@@ -7,7 +7,8 @@
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score
 import pandas as pd
-from sklearn import tree
+from sklearn import tree, neural_network, naive_bayes, mixture, linear_model, decomposition
+from sklearn.preprocessing import label_binarize, StandardScaler
 
 
 data_file = open("data/train.csv", "r")
@@ -26,20 +27,80 @@ x_train = train_df.iloc[:, 1:(train_df.shape[1]-1)]
 y_validate = validate_df.iloc[:, (train_df.shape[1]-1)]
 x_validate = validate_df.iloc[:, 1:(train_df.shape[1]-1)]
 
+def train(SK_model, x_train, y_train):
 
-decision_tree = tree.DecisionTreeClassifier()
-decision_tree = decision_tree.fit(x_train, y_train)
+    model = SK_model
+    model = model.fit(x_train, y_train)
 
-# tree_prediction_validate = decision_tree.predict(x_validate)
-tree_prediction_validate = decision_tree.predict(test_df)
+    return model
 
-tree_prediction_df = pd.DataFrame(tree_prediction_validate)
-tree_prediction_df.columns = ["status"]
-tree_prediction_df.index.name = "idx"
-map = {True: 'phishing', False: 'legitimate'}
-tree_prediction_df = tree_prediction_df.replace(map)
-tree_prediction_df.to_csv(submission_file)
+def predict(model,data_to_predict):
+    predictions = model.predict(data_to_predict)
+    predictions_df = pd.DataFrame(predictions)
 
-# print("f1 score :")
-# print(f1_score(y_validate, tree_prediction_validate))
+    return predictions_df
+
+
+def submit(predictions_dataframe):
+    predictions_dataframe.columns = ["status"]
+    predictions_dataframe.index.name = "idx"
+    map = {True: 'phishing', False: 'legitimate'}
+    predictions_df = predictions_dataframe.replace(map)
+    predictions_df.to_csv(submission_file)
+
+def testModel(SK_model, name) :
+    model = train(SK_model, x_train, y_train)
+    predictions = predict(model, x_validate)
+    print(name, " : ", f1_score(y_validate, predictions))
+
+    return model, predictions
+
+def normal_scaling(train,test):
+    scaler = StandardScaler()
+    scaler.fit(train)
+    new_train = scaler.transform(train)
+    new_test = scaler.transform(test)
+
+    return new_train, new_test
+
+def scaling_test_Model(SK_model,name):
+    x_train_scaled, x_validate_scaled = normal_scaling(x_train, x_validate)
+    model = train(SK_model, x_train_scaled, y_train)
+    predictions = predict(model, x_validate_scaled)
+    print("normal scaling + ", name, " : ", f1_score(y_validate, predictions))
+
+    return model, predictions
+
+# def PCA(train,test) :
+#     pass
+#
+# def PCAtestModel(SK_model, name) :
+#     model = train(SK_model, x_train, y_train)
+#     predictions = predict(model, x_validate)
+#     print("PCA + ", name, " : ", f1_score(y_validate, predictions))
+#
+#     return model, predictions
+
+
+testModel(tree.DecisionTreeClassifier(), "decision Tree classifier")
+testModel(tree.DecisionTreeRegressor(), "decision Tree classifier")
+
+# testModel(neural_network.MLPClassifier(hidden_layer_sizes=(3, 1), random_state=1), "MLPClassifier neural network")
+testModel(neural_network.MLPClassifier(random_state=1), "MLPClassifier neural network")
+model, validate_predictions = scaling_test_Model(neural_network.MLPClassifier(random_state=1), "MLPClassifier neural network")
+test_predictions = predict(model, test_df)
+submit(test_predictions)
+
+
+# testModel(naive_bayes.BernoulliNB(), "Bernouilli naive bayes")
+# testModel(naive_bayes.GaussianNB(), "Gaussian naive bayes")
+# testModel(naive_bayes.CategoricalNB(), "Categorical naive bayes")
+# testModel(naive_bayes.ComplementNB(), "ComplementNB naive bayes")
+# testModel(naive_bayes.MultinomialNB(), "Multinomial naive bayes")
+
+# testModel(linear_model.LogisticRegression(), "Logistic regression")
+
+
+
+
 
