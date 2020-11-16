@@ -55,21 +55,24 @@ def testModel(SK_model, name) :
 
     return model, predictions
 
-def normal_scaling(train,test):
+
+def normal_scaling(train_set, validation_set, test_set):
     scaler = StandardScaler()
-    scaler.fit(train)
-    new_train = scaler.transform(train)
-    new_test = scaler.transform(test)
+    scaler.fit(train_set)
+    new_train = scaler.transform(train_set)
+    new_validate = scaler.transform(validation_set)
+    new_test = scaler.transform(test_set)
 
-    return new_train, new_test
+    return new_train, new_validate, new_test
 
-def scaling_test_Model(SK_model,name):
-    x_train_scaled, x_validate_scaled = normal_scaling(x_train, x_validate)
+
+def scaling_test_Model(SK_model, name):
+    x_train_scaled, x_validate_scaled, test_set = normal_scaling(x_train, x_validate,test_df)
     model = train(SK_model, x_train_scaled, y_train)
     predictions = predict(model, x_validate_scaled)
     print("normal scaling + ", name, " : ", f1_score(y_validate, predictions))
 
-    return model, predictions
+    return model, predictions, test_set
 
 # def PCA(train,test) :
 #     pass
@@ -82,15 +85,16 @@ def scaling_test_Model(SK_model,name):
 #     return model, predictions
 
 
-testModel(tree.DecisionTreeClassifier(), "decision Tree classifier")
-testModel(tree.DecisionTreeRegressor(), "decision Tree classifier")
-
-# testModel(neural_network.MLPClassifier(hidden_layer_sizes=(3, 1), random_state=1), "MLPClassifier neural network")
-testModel(neural_network.MLPClassifier(random_state=1), "MLPClassifier neural network")
-model, validate_predictions = scaling_test_Model(neural_network.MLPClassifier(random_state=1), "MLPClassifier neural network")
-test_predictions = predict(model, test_df)
+# testModel(neural_network.MLPClassifier(random_state=1), "MLPClassifier neural network")
+model, validate_predictions, normalized_test = scaling_test_Model(neural_network.MLPClassifier(random_state=1), "MLPClassifier neural network")
+test_predictions = predict(model, normalized_test)
 submit(test_predictions)
 
+# testModel(tree.DecisionTreeClassifier(), "decision Tree classifier")
+# testModel(tree.DecisionTreeRegressor(), "decision Tree classifier")
+# scaling_test_Model(tree.DecisionTreeClassifier(), "decision Tree classifier")
+
+# testModel(neural_network.MLPClassifier(hidden_layer_sizes=(3, 1), random_state=1), "MLPClassifier neural network")
 
 # testModel(naive_bayes.BernoulliNB(), "Bernouilli naive bayes")
 # testModel(naive_bayes.GaussianNB(), "Gaussian naive bayes")
