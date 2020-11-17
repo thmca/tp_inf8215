@@ -9,6 +9,7 @@ from sklearn.metrics import f1_score
 import pandas as pd
 from sklearn import tree, neural_network, naive_bayes, mixture, linear_model, decomposition
 from sklearn.preprocessing import label_binarize, StandardScaler
+from sklearn.decomposition import PCA
 
 
 data_file = open("data/train.csv", "r")
@@ -66,30 +67,38 @@ def normal_scaling(train_set, validation_set, test_set):
     return new_train, new_validate, new_test
 
 
-def scaling_test_Model(SK_model, name):
-    x_train_scaled, x_validate_scaled, test_set = normal_scaling(x_train, x_validate,test_df)
+def scaling_test_model(SK_model, name):
+    x_train_scaled, x_validate_scaled, test_set = normal_scaling(x_train, x_validate, test_df)
     model = train(SK_model, x_train_scaled, y_train)
     predictions = predict(model, x_validate_scaled)
     print("normal scaling + ", name, " : ", f1_score(y_validate, predictions))
 
     return model, predictions, test_set
 
-# def PCA(train,test) :
-#     pass
-#
-# def PCAtestModel(SK_model, name) :
-#     model = train(SK_model, x_train, y_train)
-#     predictions = predict(model, x_validate)
-#     print("PCA + ", name, " : ", f1_score(y_validate, predictions))
-#
-#     return model, predictions
+def apply_PCA(train_set, validation_set, test_set) :
+    train_scaled, validate_scaled, test_scaled = normal_scaling(train_set, validation_set, test_set)
+    pca = PCA(n_components='mle')
+    pca.fit(train_scaled)
+    new_train = pca.transform(train_scaled)
+    new_validate = pca.transform(validate_scaled)
+    new_test = pca.transform(test_scaled)
 
+    return new_train, new_validate, new_test
+
+
+def PCA_test_model(SK_model, name) :
+    x_train_scaled, x_validate_scaled, test_set = apply_PCA(x_train, x_validate, test_df)
+    model = train(SK_model, x_train_scaled, y_train)
+    predictions = predict(model, x_validate_scaled)
+    print("PCA + ", name, " : ", f1_score(y_validate, predictions))
+
+    return model, predictions, test_set
 
 # testModel(neural_network.MLPClassifier(random_state=1), "MLPClassifier neural network")
-model, validate_predictions, normalized_test = scaling_test_Model(neural_network.MLPClassifier(random_state=1), "MLPClassifier neural network")
-test_predictions = predict(model, normalized_test)
-submit(test_predictions)
-
+model, validate_predictions, normalized_test = scaling_test_model(neural_network.MLPClassifier(random_state=1), "MLPClassifier neural network")
+# test_predictions = predict(model, normalized_test)
+# submit(test_predictions)
+PCA_test_model(neural_network.MLPClassifier(random_state=1), "MLPClassifier neural network")
 # testModel(tree.DecisionTreeClassifier(), "decision Tree classifier")
 # testModel(tree.DecisionTreeRegressor(), "decision Tree classifier")
 # scaling_test_Model(tree.DecisionTreeClassifier(), "decision Tree classifier")
