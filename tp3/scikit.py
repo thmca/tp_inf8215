@@ -44,8 +44,8 @@ def predict(model,data_to_predict):
     return predictions_df
 
 
-def submit(predictions_dataframe):
-    submission_file = open("data/submission.csv", "w")
+def submit(predictions_dataframe, name):
+    submission_file = open("data/" + name + ".csv", "w")
     predictions_dataframe.columns = ["status"]
     predictions_dataframe.index.name = "idx"
     map = {True: 'phishing', False: 'legitimate'}
@@ -101,10 +101,18 @@ def PCA_test_model(SK_model, name) :
 scaling_test_model(neural_network.MLPClassifier(random_state=1), "MLPClassifier neural network")
 PCA_test_model(neural_network.MLPClassifier(random_state=1), "MLPClassifier neural network")
 
+x_all_PCA, buffer, test_pca = apply_PCA(x_all, x_all, test_df)
+PCA_model = train(neural_network.MLPClassifier(random_state=1), x_all_PCA, y_all)
+PCA_predictions = predict(PCA_model, test_pca)
+submit(PCA_predictions, "PCA_network")
 
-model = train(neural_network.MLPClassifier(random_state=1), x_all, y_all)
-predictions = predict(model, test_df)
-submit(predictions)
+x_all_norm, buffer, test_norm = normal_scaling(x_all, x_all, test_df)
+normalized_model = train(neural_network.MLPClassifier(random_state=1), x_all_norm, y_all)
+normalized_predictions = predict(normalized_model, test_norm)
+submit(normalized_predictions, "normalized_network")
+
+
+
 
 
 # testModel(tree.DecisionTreeClassifier(), "decision Tree classifier")
