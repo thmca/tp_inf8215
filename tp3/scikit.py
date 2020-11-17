@@ -96,9 +96,11 @@ def PCA_test_model(SK_model, name) :
 
 # testModel(neural_network.MLPClassifier(random_state=1), "MLPClassifier neural network")
 model, validate_predictions, normalized_test = scaling_test_model(neural_network.MLPClassifier(random_state=1), "MLPClassifier neural network")
-# test_predictions = predict(model, normalized_test)
-# submit(test_predictions)
-PCA_test_model(neural_network.MLPClassifier(random_state=1), "MLPClassifier neural network")
+model, validate_predictions, normalized_test = PCA_test_model(neural_network.MLPClassifier(random_state=1), "MLPClassifier neural network")
+
+test_predictions = predict(model, normalized_test)
+submit(test_predictions)
+
 # testModel(tree.DecisionTreeClassifier(), "decision Tree classifier")
 # testModel(tree.DecisionTreeRegressor(), "decision Tree classifier")
 # scaling_test_Model(tree.DecisionTreeClassifier(), "decision Tree classifier")
