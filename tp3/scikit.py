@@ -14,7 +14,6 @@ from sklearn.decomposition import PCA
 
 data_file = open("data/train.csv", "r")
 test_file = open("data/test.csv", "r")
-submission_file = open("data/submission.csv", "w")
 
 data_df = pd.read_csv(data_file)
 data_df["status"] = (data_df["status"] == "phishing").astype(bool)
@@ -22,6 +21,9 @@ test_df = pd.read_csv(test_file)
 test_df = test_df.iloc[:, 1:]
 
 train_df, validate_df = train_test_split(data_df, test_size=0.2)
+
+y_all = data_df.iloc[:, (data_df.shape[1]-1)]
+x_all = data_df.iloc[:, 1:(data_df.shape[1]-1)]
 
 y_train = train_df.iloc[:, (train_df.shape[1]-1)]
 x_train = train_df.iloc[:, 1:(train_df.shape[1]-1)]
@@ -43,6 +45,7 @@ def predict(model,data_to_predict):
 
 
 def submit(predictions_dataframe):
+    submission_file = open("data/submission.csv", "w")
     predictions_dataframe.columns = ["status"]
     predictions_dataframe.index.name = "idx"
     map = {True: 'phishing', False: 'legitimate'}
@@ -95,11 +98,14 @@ def PCA_test_model(SK_model, name) :
     return model, predictions, test_set
 
 # testModel(neural_network.MLPClassifier(random_state=1), "MLPClassifier neural network")
-model, validate_predictions, normalized_test = scaling_test_model(neural_network.MLPClassifier(random_state=1), "MLPClassifier neural network")
-model, validate_predictions, normalized_test = PCA_test_model(neural_network.MLPClassifier(random_state=1), "MLPClassifier neural network")
+scaling_test_model(neural_network.MLPClassifier(random_state=1), "MLPClassifier neural network")
+PCA_test_model(neural_network.MLPClassifier(random_state=1), "MLPClassifier neural network")
 
-test_predictions = predict(model, normalized_test)
-submit(test_predictions)
+
+model = train(neural_network.MLPClassifier(random_state=1), x_all, y_all)
+predictions = predict(model, test_df)
+submit(predictions)
+
 
 # testModel(tree.DecisionTreeClassifier(), "decision Tree classifier")
 # testModel(tree.DecisionTreeRegressor(), "decision Tree classifier")
