@@ -119,20 +119,28 @@ x_train_PCA, x_validate_PCA, test_pca = apply_PCA(x_train, x_validate, test_df)
 n_features = x_train_PCA.shape[1]
 deep_model = keras.Sequential()
 deep_model.add(keras.Input(shape=(n_features, )))
+deep_model.add(keras.layers.Dense(128, activation='relu'))
+deep_model.add(keras.layers.Dropout(0.1))
 deep_model.add(keras.layers.Dense(64, activation='relu'))
+deep_model.add(keras.layers.Dropout(0.1))
+# deep_model.add(keras.layers.Dense(64, activation='tanh'))
+# deep_model.add(keras.layers.Dropout(0.1))
 deep_model.add(keras.layers.Dense(32, activation='relu'))
-deep_model.add(keras.layers.Dense(16, activation='relu'))
+deep_model.add(keras.layers.Dropout(0.1))
+# deep_model.add(keras.layers.Dense(16, activation='tanh'))
+# deep_model.add(keras.layers.Dropout(0.1))
 deep_model.add(keras.layers.Dense(8, activation='relu'))
+deep_model.add(keras.layers.Dropout(0.1))
 deep_model.add(keras.layers.Dense(1, activation='sigmoid'))
 deep_model.summary()
 
 deep_model.compile(
-              # optimizer='adam',
-              optimizer='rmsprop',
+              optimizer='adam',
+              # optimizer='rmsprop',
               loss='binary_crossentropy',
               metrics=['accuracy'])
 
-deep_model.fit(x_train_PCA, y_train, epochs=200, batch_size=32)
+deep_model.fit(x_train_PCA, y_train, epochs=800, batch_size=32)
 test_loss, test_acc = deep_model.evaluate(x_validate_PCA, y_validate)
 print('Test accuracy:', test_acc)
 deep_model.save("models/10L_30E_1B")
