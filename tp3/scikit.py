@@ -101,28 +101,38 @@ def PCA_test_model(SK_model, name) :
     return model, predictions, test_set
 
 
-deep_model = keras.Sequential([
-    # keras.layers.Flatten(input_shape=(87,)),
-    keras.layers.Dense(25, activation=tf.nn.relu),
-    keras.layers.Dense(50, activation=tf.nn.relu),
-    keras.layers.Dense(75, activation=tf.nn.relu),
-    keras.layers.Dense(100, activation=tf.nn.relu),
-    keras.layers.Dense(100, activation=tf.nn.relu),
-    keras.layers.Dense(75, activation=tf.nn.relu),
-    keras.layers.Dense(50, activation=tf.nn.relu),
-    keras.layers.Dense(25, activation=tf.nn.relu),
-    keras.layers.Dense(10, activation=tf.nn.relu),
-    keras.layers.Dense(1, activation=tf.nn.sigmoid),
-])
+# deep_model = keras.Sequential([
+#     # keras.layers.Flatten(input_shape=(87,)),
+#     keras.layers.Dense(45, activation=tf.nn.relu),
+#     keras.layers.Dense(100, activation=tf.nn.relu),
+#     keras.layers.Dense(50, activation=tf.nn.sigmoid),
+#     keras.layers.Dense(25, activation=tf.nn.sigmoid),
+#     keras.layers.Dense(1, activation=tf.nn.sigmoid),
+#     # keras.layers.LSTM(10, )
+# ])
+
+
 
 classification_ceiling = 0.85
 x_train_PCA, x_validate_PCA, test_pca = apply_PCA(x_train, x_validate, test_df)
 
-deep_model.compile(optimizer='adam',
+n_features = x_train_PCA.shape[1]
+deep_model = keras.Sequential()
+deep_model.add(keras.Input(shape=(n_features, )))
+deep_model.add(keras.layers.Dense(64, activation='relu'))
+deep_model.add(keras.layers.Dense(32, activation='relu'))
+deep_model.add(keras.layers.Dense(16, activation='relu'))
+deep_model.add(keras.layers.Dense(8, activation='relu'))
+deep_model.add(keras.layers.Dense(1, activation='sigmoid'))
+deep_model.summary()
+
+deep_model.compile(
+              # optimizer='adam',
+              optimizer='rmsprop',
               loss='binary_crossentropy',
               metrics=['accuracy'])
 
-deep_model.fit(x_train_PCA, y_train, epochs=30, batch_size=1)
+deep_model.fit(x_train_PCA, y_train, epochs=200, batch_size=32)
 test_loss, test_acc = deep_model.evaluate(x_validate_PCA, y_validate)
 print('Test accuracy:', test_acc)
 deep_model.save("models/10L_30E_1B")
