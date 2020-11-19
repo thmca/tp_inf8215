@@ -102,36 +102,56 @@ def PCA_test_model(SK_model, name) :
 
 
 deep_model = keras.Sequential([
-    # keras.layers.Flatten(input_shape=(4,)),
-    keras.layers.Dense(16, activation=tf.nn.relu),
-    keras.layers.Dense(16, activation=tf.nn.relu),
-    keras.layers.Dense(16, activation=tf.nn.relu),
-    keras.layers.Dense(8, activation=tf.nn.relu),
-    keras.layers.Dense(4, activation=tf.nn.relu),
+    # keras.layers.Flatten(input_shape=(87,)),
+    keras.layers.Dense(25, activation=tf.nn.relu),
+    keras.layers.Dense(50, activation=tf.nn.relu),
+    keras.layers.Dense(75, activation=tf.nn.relu),
+    keras.layers.Dense(100, activation=tf.nn.relu),
+    keras.layers.Dense(100, activation=tf.nn.relu),
+    keras.layers.Dense(75, activation=tf.nn.relu),
+    keras.layers.Dense(50, activation=tf.nn.relu),
+    keras.layers.Dense(25, activation=tf.nn.relu),
+    keras.layers.Dense(10, activation=tf.nn.relu),
     keras.layers.Dense(1, activation=tf.nn.sigmoid),
 ])
+
+classification_ceiling = 0.85
+x_train_PCA, x_validate_PCA, test_pca = apply_PCA(x_train, x_validate, test_df)
 
 deep_model.compile(optimizer='adam',
               loss='binary_crossentropy',
               metrics=['accuracy'])
 
-deep_model.fit(x_train, y_train, epochs=50, batch_size=1)
-test_loss, test_acc = deep_model.evaluate(x_validate, y_validate)
+deep_model.fit(x_train_PCA, y_train, epochs=30, batch_size=1)
+test_loss, test_acc = deep_model.evaluate(x_validate_PCA, y_validate)
 print('Test accuracy:', test_acc)
+deep_model.save("models/10L_30E_1B")
+
+# deep_model = keras.models.load_model("models/10L_30E_1B")
+
+validate_predictions = deep_model.predict(x_validate_PCA)
+validate_predictions = validate_predictions > classification_ceiling
+print("deep learning model f1 score ", " : ", f1_score(y_validate, validate_predictions))
 
 
-scaling_test_model(neural_network.MLPClassifier(random_state=1), "MLPClassifier neural network")
-PCA_test_model(neural_network.MLPClassifier(random_state=1), "MLPClassifier neural network")
+deep_predictions = deep_model.predict(test_pca)
+deep_predictions = deep_predictions > classification_ceiling
+deep_prediction_df = pd.DataFrame(data=deep_predictions)
 
-x_all_PCA, buffer, test_pca = apply_PCA(x_all, x_all, test_df)
-PCA_model = train(neural_network.MLPClassifier(random_state=1), x_all_PCA, y_all)
-PCA_predictions = predict(PCA_model, test_pca)
-submit(PCA_predictions, "PCA_network")
+submit(deep_prediction_df, "deepLearningModel")
 
-x_all_norm, buffer, test_norm = normal_scaling(x_all, x_all, test_df)
-normalized_model = train(neural_network.MLPClassifier(random_state=1), x_all_norm, y_all)
-normalized_predictions = predict(normalized_model, test_norm)
-submit(normalized_predictions, "normalized_network")
+# scaling_test_model(neural_network.MLPClassifier(random_state=1), "MLPClassifier neural network")
+# PCA_test_model(neural_network.MLPClassifier(random_state=1), "MLPClassifier neural network")
+#
+# x_all_PCA, buffer, test_pca = apply_PCA(x_all, x_all, test_df)
+# PCA_model = train(neural_network.MLPClassifier(random_state=1), x_all_PCA, y_all)
+# PCA_predictions = predict(PCA_model, test_pca)
+# submit(PCA_predictions, "PCA_network")
+#
+# x_all_norm, buffer, test_norm = normal_scaling(x_all, x_all, test_df)
+# normalized_model = train(neural_network.MLPClassifier(random_state=1), x_all_norm, y_all)
+# normalized_predictions = predict(normalized_model, test_norm)
+# submit(normalized_predictions, "normalized_network")
 
 
 
