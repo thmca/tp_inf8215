@@ -10,13 +10,16 @@ import pandas as pd
 from sklearn import tree, neural_network, naive_bayes, mixture, linear_model, decomposition
 from sklearn.preprocessing import label_binarize, StandardScaler
 from sklearn.decomposition import PCA
+import tensorflow as tf
+from tensorflow import keras
 
 
 data_file = open("data/train.csv", "r")
 test_file = open("data/test.csv", "r")
 
 data_df = pd.read_csv(data_file)
-data_df["status"] = (data_df["status"] == "phishing").astype(bool)
+# data_df["status"] = (data_df["status"] == "phishing").astype(bool)
+data_df["status"] = label_binarize(data_df["status"], classes=["legitimate", "phishing"])
 test_df = pd.read_csv(test_file)
 test_df = test_df.iloc[:, 1:]
 
@@ -48,9 +51,9 @@ def submit(predictions_dataframe, name):
     submission_file = open("data/" + name + ".csv", "w")
     predictions_dataframe.columns = ["status"]
     predictions_dataframe.index.name = "idx"
-    map = {True: 'phishing', False: 'legitimate'}
-    predictions_df = predictions_dataframe.replace(map)
-    predictions_df.to_csv(submission_file)
+    maping = {1: 'phishing', 0: 'legitimate'}
+    predictions_dataframe = predictions_dataframe.replace(maping)
+    predictions_dataframe.to_csv(submission_file)
 
 def testModel(SK_model, name) :
     model = train(SK_model, x_train, y_train)
@@ -97,7 +100,26 @@ def PCA_test_model(SK_model, name) :
 
     return model, predictions, test_set
 
-# testModel(neural_network.MLPClassifier(random_state=1), "MLPClassifier neural network")
+
+deep_model = keras.Sequential([
+    # keras.layers.Flatten(input_shape=(4,)),
+    keras.layers.Dense(16, activation=tf.nn.relu),
+    keras.layers.Dense(16, activation=tf.nn.relu),
+    keras.layers.Dense(16, activation=tf.nn.relu),
+    keras.layers.Dense(8, activation=tf.nn.relu),
+    keras.layers.Dense(4, activation=tf.nn.relu),
+    keras.layers.Dense(1, activation=tf.nn.sigmoid),
+])
+
+deep_model.compile(optimizer='adam',
+              loss='binary_crossentropy',
+              metrics=['accuracy'])
+
+deep_model.fit(x_train, y_train, epochs=50, batch_size=1)
+test_loss, test_acc = deep_model.evaluate(x_validate, y_validate)
+print('Test accuracy:', test_acc)
+
+
 scaling_test_model(neural_network.MLPClassifier(random_state=1), "MLPClassifier neural network")
 PCA_test_model(neural_network.MLPClassifier(random_state=1), "MLPClassifier neural network")
 
@@ -119,15 +141,7 @@ submit(normalized_predictions, "normalized_network")
 # testModel(tree.DecisionTreeRegressor(), "decision Tree classifier")
 # scaling_test_Model(tree.DecisionTreeClassifier(), "decision Tree classifier")
 
-# testModel(neural_network.MLPClassifier(hidden_layer_sizes=(3, 1), random_state=1), "MLPClassifier neural network")
 
-# testModel(naive_bayes.BernoulliNB(), "Bernouilli naive bayes")
-# testModel(naive_bayes.GaussianNB(), "Gaussian naive bayes")
-# testModel(naive_bayes.CategoricalNB(), "Categorical naive bayes")
-# testModel(naive_bayes.ComplementNB(), "ComplementNB naive bayes")
-# testModel(naive_bayes.MultinomialNB(), "Multinomial naive bayes")
-
-# testModel(linear_model.LogisticRegression(), "Logistic regression")
 
 
 
