@@ -113,7 +113,7 @@ def PCA_test_model(SK_model, name) :
 
 
 
-classification_ceiling = 0.85
+classification_ceiling = 0.6
 x_train_PCA, x_validate_PCA, test_pca = apply_PCA(x_train, x_validate, test_df)
 
 n_features = x_train_PCA.shape[1]
@@ -141,18 +141,22 @@ deep_model.compile(
               # optimizer='rmsprop',
               loss='binary_crossentropy',
               metrics=['accuracy'])
+#
+# deep_model.fit(x_train_PCA, y_train, epochs=800, batch_size=32)
+# test_loss, test_acc = deep_model.evaluate(x_validate_PCA, y_validate)
+# print('Test accuracy:', test_acc)
+#
+#
+# # deep_model = keras.models.load_model("models/10L_30E_1B")
+#
+# validate_predictions = deep_model.predict(x_validate_PCA)
+# validate_predictions = validate_predictions > classification_ceiling
+# print("deep learning model f1 score ", " : ", f1_score(y_validate, validate_predictions))
 
-deep_model.fit(x_train_PCA, y_train, epochs=800, batch_size=32)
-test_loss, test_acc = deep_model.evaluate(x_validate_PCA, y_validate)
-print('Test accuracy:', test_acc)
-deep_model.save("models/10L_30E_1B")
+x_all_PCA, buffer, test_pca = apply_PCA(x_all, x_all, test_df)
+deep_model.fit(x_all_PCA, y_all, epochs=800, batch_size=32)
 
-# deep_model = keras.models.load_model("models/10L_30E_1B")
-
-validate_predictions = deep_model.predict(x_validate_PCA)
-validate_predictions = validate_predictions > classification_ceiling
-print("deep learning model f1 score ", " : ", f1_score(y_validate, validate_predictions))
-
+deep_model.save("reproduceable_submit")
 
 deep_predictions = deep_model.predict(test_pca)
 deep_predictions = deep_predictions > classification_ceiling
