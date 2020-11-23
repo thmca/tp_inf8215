@@ -3,7 +3,7 @@
 # pip3 install scipy
 
 # import sklearn as skl
-# import numpy as np
+import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score
 import pandas as pd
@@ -12,6 +12,7 @@ from sklearn.preprocessing import label_binarize, StandardScaler
 from sklearn.decomposition import PCA
 import tensorflow as tf
 from tensorflow import keras
+from math import floor
 
 
 data_file = open("data/train.csv", "r")
@@ -23,7 +24,12 @@ data_df["status"] = label_binarize(data_df["status"], classes=["legitimate", "ph
 test_df = pd.read_csv(test_file)
 test_df = test_df.iloc[:, 1:]
 
-train_df, validate_df = train_test_split(data_df, test_size=0.2)
+# replace missing values by mean in domain_age column
+data_df["domain_age"] = data_df["domain_age"].replace(-1, np.nan)
+domain_age_mean = floor(pd.DataFrame.mean(data_df["domain_age"]))
+data_df["domain_age"] = data_df["domain_age"].replace(np.nan, domain_age_mean)
+
+train_df, validate_df = train_test_split(data_df, test_size=0.3)
 
 y_all = data_df.iloc[:, (data_df.shape[1]-1)]
 x_all = data_df.iloc[:, 1:(data_df.shape[1]-1)]
@@ -32,6 +38,7 @@ y_train = train_df.iloc[:, (train_df.shape[1]-1)]
 x_train = train_df.iloc[:, 1:(train_df.shape[1]-1)]
 y_validate = validate_df.iloc[:, (train_df.shape[1]-1)]
 x_validate = validate_df.iloc[:, 1:(train_df.shape[1]-1)]
+
 
 def train(SK_model, x_train, y_train):
 
@@ -101,57 +108,54 @@ def PCA_test_model(SK_model, name) :
     return model, predictions, test_set
 
 
-# deep_model = keras.Sequential([
-#     # keras.layers.Flatten(input_shape=(87,)),
-#     keras.layers.Dense(45, activation=tf.nn.relu),
-#     keras.layers.Dense(100, activation=tf.nn.relu),
-#     keras.layers.Dense(50, activation=tf.nn.sigmoid),
-#     keras.layers.Dense(25, activation=tf.nn.sigmoid),
-#     keras.layers.Dense(1, activation=tf.nn.sigmoid),
-#     # keras.layers.LSTM(10, )
-# ])
-
-
-
-classification_ceiling = 0.85
-x_train_PCA, x_validate_PCA, test_pca = apply_PCA(x_train, x_validate, test_df)
+x_train_PCA, x_validate_PCA, test_pca = normal_scaling(x_train, x_validate, test_df)
 
 n_features = x_train_PCA.shape[1]
 deep_model = keras.Sequential()
 deep_model.add(keras.Input(shape=(n_features, )))
-# deep_model.add(keras.layers.Dense(128, activation='relu'))
-# deep_model.add(keras.layers.Dropout(0.1))
-deep_model.add(keras.layers.Dense(32, activation='relu'))
-deep_model.add(keras.layers.Dropout(0.1))
-# deep_model.add(keras.layers.Dense(64, activation='tanh'))
-# deep_model.add(keras.layers.Dropout(0.1))
-deep_model.add(keras.layers.Dense(32, activation='relu'))
-deep_model.add(keras.layers.Dropout(0.1))
-deep_model.add(keras.layers.Dense(16, activation='relu'))
-deep_model.add(keras.layers.Dropout(0.1))
-# deep_model.add(keras.layers.Dense(16, activation='tanh'))
-# deep_model.add(keras.layers.Dropout(0.1))
 deep_model.add(keras.layers.Dense(8, activation='relu'))
+deep_model.add(keras.layers.Dense(16, activation='relu'))
+deep_model.add(keras.layers.Dense(32, activation='relu'))
+deep_model.add(keras.layers.Dense(64, activation='relu'))
+deep_model.add(keras.layers.Dense(32, activation='relu'))
+deep_model.add(keras.layers.Dense(16, activation='relu'))
+deep_model.add(keras.layers.Dense(8, activation='relu'))
+# deep_model.add(keras.layers.Dense(8, activation='relu'))
 deep_model.add(keras.layers.Dropout(0.1))
+# deep_model.add(keras.layers.Dense(4, activation='relu'))
+# deep_model.add(keras.layers.Dropout(0.1))
 deep_model.add(keras.layers.Dense(1, activation='sigmoid'))
 deep_model.summary()
 
-deep_model.compile(
-              optimizer='adam',
-              # optimizer='rmsprop',
-              loss='binary_crossentropy',
-              metrics=['accuracy'])
+# default 0.001
+optimizer = keras.optimizers.Adam(learning_rate=0.0005)
 
-deep_model.fit(x_train_PCA, y_train, epochs=800, batch_size=32)
+deep_model.compile(
+              optimizer=optimizer,
+              # optimizer='adam',
+              loss='binary_crossentropy',
+              metrics=['accuracy']
+)
+
+classification_ceiling = 0.6
+# deep_model = keras.models.load_model("models/5L_200E_2B_f199")
+
+deep_model.fit(x_train_PCA, y_train, epochs=300, batch_size=1)
 test_loss, test_acc = deep_model.evaluate(x_validate_PCA, y_validate)
 print('Test accuracy:', test_acc)
-deep_model.save("models/10L_30E_1B")
-
-# deep_model = keras.models.load_model("models/10L_30E_1B")
+deep_model.save("models/current")
 
 validate_predictions = deep_model.predict(x_validate_PCA)
-validate_predictions = validate_predictions > classification_ceiling
-print("deep learning model f1 score ", " : ", f1_score(y_validate, validate_predictions))
+
+for classification_ceiling in range(10):
+    classification_ceiling = classification_ceiling/10
+
+    binary_predictions = validate_predictions >= classification_ceiling
+    print("ceil : ", classification_ceiling, "deep learning model f1 score ", " : ", f1_score(y_validate, binary_predictions))
+
+# x_all_scaled, buffer, test_scaled = normal_scaling(x_all, x_all, test_df)
+# deep_model.fit(x_all_scaled, y_all, epochs=600, batch_size=16)
+
 
 
 deep_predictions = deep_model.predict(test_pca)
