@@ -1,8 +1,3 @@
-# pip install -U scikit-learn
-# pip3 install numpy
-# pip3 install scipy
-
-# import sklearn as skl
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import f1_score
@@ -14,12 +9,15 @@ import tensorflow as tf
 from tensorflow import keras
 from math import floor
 
+# Open the csv files
 data_file = open("data/train.csv", "r")
 test_file = open("data/test.csv", "r")
 
+# Create  train dataframe and binarize: legitiamte = 0 and phising =1
 data_df = pd.read_csv(data_file)
-# data_df["status"] = (data_df["status"] == "phishing").astype(bool)
 data_df["status"] = label_binarize(data_df["status"], classes=["legitimate", "phishing"])
+
+# Create the test dataframe and remove the url column
 test_df = pd.read_csv(test_file)
 test_df = test_df.iloc[:, 1:]
 
@@ -28,11 +26,14 @@ data_df["domain_age"] = data_df["domain_age"].replace(-1, np.nan)
 domain_age_mean = floor(pd.DataFrame.mean(data_df["domain_age"]))
 data_df["domain_age"] = data_df["domain_age"].replace(np.nan, domain_age_mean)
 
+# This can be used when validation is needed
 train_df, validate_df = train_test_split(data_df, test_size=0.3)
 
+# This is used when we want to use the entire train csv for submission
 y_all = data_df.iloc[:, (data_df.shape[1] - 1)]
 x_all = data_df.iloc[:, 1:(data_df.shape[1] - 1)]
 
+# Used for validation purposes
 y_train = train_df.iloc[:, (train_df.shape[1] - 1)]
 x_train = train_df.iloc[:, 1:(train_df.shape[1] - 1)]
 y_validate = validate_df.iloc[:, (train_df.shape[1] - 1)]
@@ -115,6 +116,7 @@ def mean_model_calculator(predictions):
     return df
 
 
+# Apply PCA so that we do not need to process all 86 attributes
 x_train_PCA, x_validate_PCA, test_pca = apply_PCA(x_train, x_validate, test_df)
 
 n_features = x_train_PCA.shape[1]
@@ -134,7 +136,7 @@ deep_model.add(keras.layers.Dropout(0.1))
 deep_model.add(keras.layers.Dense(1, activation='sigmoid'))
 deep_model.summary()
 
-# default 0.001
+# default 0.001 Sets the learning rate for the code bellow
 optimizer = keras.optimizers.Adam(learning_rate=0.0005)
 
 deep_model.compile(
@@ -145,8 +147,12 @@ deep_model.compile(
 )
 
 classification_ceiling = 0.6
+
+# You can either load an existing model or call the fil function bellow. (Not both at same time)
 # deep_model = keras.models.load_model("models/5L_200E_2B_f199")
 
+
+# **************************************************************
 deep_model.fit(x_train_PCA, y_train, epochs=50, batch_size=8)
 test_loss, test_acc = deep_model.evaluate(x_validate_PCA, y_validate)
 print('Test accuracy:', test_acc)
@@ -160,18 +166,20 @@ for classification_ceiling in range(10):
     binary_predictions = validate_predictions >= classification_ceiling
     print("ceil : ", classification_ceiling, "deep learning model f1 score ", " : ", f1_score(y_validate, binary_predictions))
 
+# **************************************************************
+
+# This is for the submission only. When un-commenting comment  code between stars
 # x_all_scaled, buffer, test_scaled = normal_scaling(x_all, x_all, test_df)
 # deep_model.fit(x_all_scaled, y_all, epochs=600, batch_size=16)
 # deep_model.save("models/current")
 
+# deep_predictions = deep_model.predict(test_pca)
+# deep_predictions = deep_predictions > classification_ceiling
+# deep_prediction_df = pd.DataFrame(data=deep_predictions)
+#
+# submit(deep_prediction_df, "deepLearningModel")
 
-
-deep_predictions = deep_model.predict(test_pca)
-deep_predictions = deep_predictions > classification_ceiling
-deep_prediction_df = pd.DataFrame(data=deep_predictions)
-
-submit(deep_prediction_df, "deepLearningModel")
-
+# Old models that have been tested and have not performed
 # scaling_test_model(neural_network.MLPClassifier(random_state=1), "MLPClassifier neural network")
 # PCA_test_model(neural_network.MLPClassifier(random_state=1), "MLPClassifier neural network")
 #
@@ -184,7 +192,6 @@ submit(deep_prediction_df, "deepLearningModel")
 # normalized_model = train(neural_network.MLPClassifier(random_state=1), x_all_norm, y_all)
 # normalized_predictions = predict(normalized_model, test_norm)
 # submit(normalized_predictions, "normalized_network")
-
 
 # testModel(tree.DecisionTreeClassifier(), "decision Tree classifier")
 # testModel(tree.DecisionTreeRegressor(), "decision Tree classifier")
