@@ -72,10 +72,10 @@ def validate_predictions(x_train, y_train, x_validate, y_validate):
 
     return validate_predictions
 
-def submission_predictions(x_all,y_all, test_pca):
+def submission_predictions(x_all,y_all, test_df):
 
     #This is for the submission only. When un-commenting comment  code between stars
-    x_all_scaled, buffer = normal_scaling(x_all, x_all)
+    x_all_scaled, test_scaled = normal_scaling(x_all, test_df)
 
     n_features = x_all_scaled.shape[1]
 
@@ -84,15 +84,15 @@ def submission_predictions(x_all,y_all, test_pca):
     # for explanations on activation functions see :
     # https://subscription.packtpub.com/book/programming/9781838821654/1/ch01lvl1sec04/3-multilayer-perceptron-mlp
 
-    deep_model = keras.Sequential()
-    deep_model.add(keras.Input(shape=(n_features,)))
-    deep_model.add(keras.layers.Dense(16, activation='selu'))
-    deep_model.add(keras.layers.Dropout(0.1))
-    deep_model.add(keras.layers.Dense(16, activation='relu'))
-    deep_model.add(keras.layers.Dropout(0.1))
-    deep_model.add(keras.layers.Dense(16, activation='tanh'))
-    deep_model.add(keras.layers.Dense(1, activation='sigmoid'))
-    deep_model.summary()
+    deep_model2 = keras.Sequential()
+    deep_model2.add(keras.Input(shape=(n_features,)))
+    deep_model2.add(keras.layers.Dense(16, activation='selu'))
+    deep_model2.add(keras.layers.Dropout(0.1))
+    deep_model2.add(keras.layers.Dense(16, activation='relu'))
+    deep_model2.add(keras.layers.Dropout(0.1))
+    deep_model2.add(keras.layers.Dense(16, activation='tanh'))
+    deep_model2.add(keras.layers.Dense(1, activation='sigmoid'))
+    deep_model2.summary()
 
     # Model parameters
     epochs = 100
@@ -100,16 +100,16 @@ def submission_predictions(x_all,y_all, test_pca):
     classification_ceiling = 0.6
     optimizer = keras.optimizers.Adam(learning_rate=0.002)  # default 0.001 Sets the learning rate for the code bellow
 
-    deep_model.compile(
+    deep_model2.compile(
         optimizer=optimizer,
         loss='binary_crossentropy',
         metrics=['accuracy']
     )
 
-    deep_model.fit(x_all_scaled, y_all, epochs=epochs, batch_size=batch_size)
-    deep_model.save("models/current")
+    deep_model2.fit(x_all_scaled, y_all, epochs=epochs, batch_size=batch_size)
+    deep_model2.save("models/current")
 
-    deep_predictions = deep_model.predict(test_pca)
+    deep_predictions = deep_model2.predict(test_scaled)
     deep_predictions = deep_predictions > classification_ceiling
     deep_prediction_df = pd.DataFrame(data=deep_predictions)
 

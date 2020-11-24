@@ -70,6 +70,8 @@ binary_predictions = predictions >= 0.7
 print("deep learning model f1 score ", " : ",
           f1_score(y_validate, binary_predictions))
 
+model1.submission_predictions(x_all, y_all, test_df)
+
 
 
 
