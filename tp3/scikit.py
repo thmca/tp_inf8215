@@ -120,40 +120,42 @@ def mean_model_calculator(predictions):
 x_train_PCA, x_validate_PCA, test_pca = apply_PCA(x_train, x_validate, test_df)
 
 n_features = x_train_PCA.shape[1]
+
+# Model structure
+# possible activations : tanh, relu, elu, selu
+# for explanations on activation functions see :
+# https://subscription.packtpub.com/book/programming/9781838821654/1/ch01lvl1sec04/3-multilayer-perceptron-mlp
+
 deep_model = keras.Sequential()
 deep_model.add(keras.Input(shape=(n_features, )))
-deep_model.add(keras.layers.Dense(8, activation='relu'))
-deep_model.add(keras.layers.Dense(16, activation='relu'))
-deep_model.add(keras.layers.Dense(32, activation='relu'))
-deep_model.add(keras.layers.Dense(64, activation='relu'))
-deep_model.add(keras.layers.Dense(32, activation='relu'))
-deep_model.add(keras.layers.Dense(16, activation='relu'))
-deep_model.add(keras.layers.Dense(8, activation='relu'))
-# deep_model.add(keras.layers.Dense(8, activation='relu'))
+deep_model.add(keras.layers.Dense(16, activation='selu'))
 deep_model.add(keras.layers.Dropout(0.1))
-# deep_model.add(keras.layers.Dense(4, activation='relu'))
-# deep_model.add(keras.layers.Dropout(0.1))
+deep_model.add(keras.layers.Dense(16, activation='relu'))
+deep_model.add(keras.layers.Dropout(0.1))
+deep_model.add(keras.layers.Dense(16, activation='tanh'))
 deep_model.add(keras.layers.Dense(1, activation='sigmoid'))
 deep_model.summary()
 
-# default 0.001 Sets the learning rate for the code bellow
-optimizer = keras.optimizers.Adam(learning_rate=0.0005)
+# Model parameters
+epochs = 100
+batch_size = 128
+classification_ceiling = 0.6
+optimizer = keras.optimizers.Adam(learning_rate=0.002)  # default 0.001 Sets the learning rate for the code bellow
 
 deep_model.compile(
               optimizer=optimizer,
-              # optimizer='adam',
               loss='binary_crossentropy',
               metrics=['accuracy']
 )
 
-classification_ceiling = 0.6
+
 
 # You can either load an existing model or call the fil function bellow. (Not both at same time)
 # deep_model = keras.models.load_model("models/5L_200E_2B_f199")
 
 
 # **************************************************************
-deep_model.fit(x_train_PCA, y_train, epochs=50, batch_size=8)
+deep_model.fit(x_train_PCA, y_train, epochs=epochs, batch_size=batch_size)
 test_loss, test_acc = deep_model.evaluate(x_validate_PCA, y_validate)
 print('Test accuracy:', test_acc)
 
@@ -170,14 +172,16 @@ for classification_ceiling in range(10):
 
 # This is for the submission only. When un-commenting comment  code between stars
 # x_all_scaled, buffer, test_scaled = normal_scaling(x_all, x_all, test_df)
-# deep_model.fit(x_all_scaled, y_all, epochs=600, batch_size=16)
+# deep_model.fit(x_all_scaled, y_all, epochs=epochs, batch_size=batch_size)
 # deep_model.save("models/current")
 
 # deep_predictions = deep_model.predict(test_pca)
 # deep_predictions = deep_predictions > classification_ceiling
 # deep_prediction_df = pd.DataFrame(data=deep_predictions)
-#
+
 # submit(deep_prediction_df, "deepLearningModel")
+
+# **************************************************************
 
 # Old models that have been tested and have not performed
 # scaling_test_model(neural_network.MLPClassifier(random_state=1), "MLPClassifier neural network")
