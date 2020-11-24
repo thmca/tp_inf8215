@@ -14,7 +14,6 @@ import tensorflow as tf
 from tensorflow import keras
 from math import floor
 
-
 data_file = open("data/train.csv", "r")
 test_file = open("data/test.csv", "r")
 
@@ -31,23 +30,23 @@ data_df["domain_age"] = data_df["domain_age"].replace(np.nan, domain_age_mean)
 
 train_df, validate_df = train_test_split(data_df, test_size=0.3)
 
-y_all = data_df.iloc[:, (data_df.shape[1]-1)]
-x_all = data_df.iloc[:, 1:(data_df.shape[1]-1)]
+y_all = data_df.iloc[:, (data_df.shape[1] - 1)]
+x_all = data_df.iloc[:, 1:(data_df.shape[1] - 1)]
 
-y_train = train_df.iloc[:, (train_df.shape[1]-1)]
-x_train = train_df.iloc[:, 1:(train_df.shape[1]-1)]
-y_validate = validate_df.iloc[:, (train_df.shape[1]-1)]
-x_validate = validate_df.iloc[:, 1:(train_df.shape[1]-1)]
+y_train = train_df.iloc[:, (train_df.shape[1] - 1)]
+x_train = train_df.iloc[:, 1:(train_df.shape[1] - 1)]
+y_validate = validate_df.iloc[:, (train_df.shape[1] - 1)]
+x_validate = validate_df.iloc[:, 1:(train_df.shape[1] - 1)]
 
 
 def train(SK_model, x_train, y_train):
-
     model = SK_model
     model = model.fit(x_train, y_train)
 
     return model
 
-def predict(model,data_to_predict):
+
+def predict(model, data_to_predict):
     predictions = model.predict(data_to_predict)
     predictions_df = pd.DataFrame(predictions)
 
@@ -62,7 +61,8 @@ def submit(predictions_dataframe, name):
     predictions_dataframe = predictions_dataframe.replace(maping)
     predictions_dataframe.to_csv(submission_file)
 
-def testModel(SK_model, name) :
+
+def testModel(SK_model, name):
     model = train(SK_model, x_train, y_train)
     predictions = predict(model, x_validate)
     print(name, " : ", f1_score(y_validate, predictions))
@@ -88,7 +88,8 @@ def scaling_test_model(SK_model, name):
 
     return model, predictions, test_set
 
-def apply_PCA(train_set, validation_set, test_set) :
+
+def apply_PCA(train_set, validation_set, test_set):
     train_scaled, validate_scaled, test_scaled = normal_scaling(train_set, validation_set, test_set)
     pca = PCA(n_components='mle')
     pca.fit(train_scaled)
@@ -99,7 +100,7 @@ def apply_PCA(train_set, validation_set, test_set) :
     return new_train, new_validate, new_test
 
 
-def PCA_test_model(SK_model, name) :
+def PCA_test_model(SK_model, name):
     x_train_scaled, x_validate_scaled, test_set = apply_PCA(x_train, x_validate, test_df)
     model = train(SK_model, x_train_scaled, y_train)
     predictions = predict(model, x_validate_scaled)
@@ -108,7 +109,13 @@ def PCA_test_model(SK_model, name) :
     return model, predictions, test_set
 
 
-x_train_PCA, x_validate_PCA, test_pca = normal_scaling(x_train, x_validate, test_df)
+def mean_model_calculator(predictions):
+    new_frame = pd.concat(predictions, axis=0, sort=False)
+    df = new_frame.mean(axis=0)
+    return df
+
+
+x_train_PCA, x_validate_PCA, test_pca = apply_PCA(x_train, x_validate, test_df)
 
 n_features = x_train_PCA.shape[1]
 deep_model = keras.Sequential()
@@ -140,10 +147,10 @@ deep_model.compile(
 classification_ceiling = 0.6
 # deep_model = keras.models.load_model("models/5L_200E_2B_f199")
 
-deep_model.fit(x_train_PCA, y_train, epochs=300, batch_size=1)
+deep_model.fit(x_train_PCA, y_train, epochs=50, batch_size=8)
 test_loss, test_acc = deep_model.evaluate(x_validate_PCA, y_validate)
 print('Test accuracy:', test_acc)
-deep_model.save("models/current")
+
 
 validate_predictions = deep_model.predict(x_validate_PCA)
 
@@ -155,6 +162,7 @@ for classification_ceiling in range(10):
 
 # x_all_scaled, buffer, test_scaled = normal_scaling(x_all, x_all, test_df)
 # deep_model.fit(x_all_scaled, y_all, epochs=600, batch_size=16)
+# deep_model.save("models/current")
 
 
 
@@ -178,16 +186,6 @@ submit(deep_prediction_df, "deepLearningModel")
 # submit(normalized_predictions, "normalized_network")
 
 
-
-
-
 # testModel(tree.DecisionTreeClassifier(), "decision Tree classifier")
 # testModel(tree.DecisionTreeRegressor(), "decision Tree classifier")
 # scaling_test_Model(tree.DecisionTreeClassifier(), "decision Tree classifier")
-
-
-
-
-
-
-
