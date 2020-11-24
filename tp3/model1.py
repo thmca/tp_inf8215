@@ -67,8 +67,6 @@ def validate_predictions(x_train, y_train, x_validate, y_validate):
 
     # **************************************************************
     deep_model.fit(x_train_PCA, y_train, epochs=epochs, batch_size=batch_size)
-    test_loss, test_acc = deep_model.evaluate(x_validate_PCA, y_validate)
-    print('Test accuracy:', test_acc)
 
     validate_predictions = deep_model.predict(x_validate_PCA)
 

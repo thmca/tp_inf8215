@@ -1,4 +1,5 @@
 import numpy as np
+from sklearn import tree, neural_network
 from sklearn.metrics import f1_score
 from sklearn.model_selection import train_test_split
 import pandas as pd
@@ -6,6 +7,7 @@ from sklearn.preprocessing import label_binarize
 from math import floor
 
 import model1
+import ScikitModel
 
 def mean_model_calculator(predictions):
     new_frame = pd.concat(predictions, axis=1, sort=False)
@@ -44,17 +46,26 @@ x_validate = validate_df.iloc[:, 1:(train_df.shape[1] - 1)]
 
 prediction_model1 = model1.validate_predictions(x_train, y_train, x_validate, y_validate)
 
-prediction_model2 = model1.validate_predictions(x_train, y_train, x_validate, y_validate)
+prediction_decisionTreeModel = ScikitModel.validate_predictions(tree.DecisionTreeClassifier(), x_train, y_train, x_validate)
 
-prediction_model3 = model1.validate_predictions(x_train, y_train, x_validate, y_validate)
+prediction_MLPModel = ScikitModel.validate_predictions(neural_network.MLPClassifier(random_state=1), x_train, y_train, x_validate)
 
 prediction_model1_df = pd.DataFrame(data=prediction_model1)
-prediction_model2_df = pd.DataFrame(data=prediction_model2)
-prediction_model3_df = pd.DataFrame(data=prediction_model3)
+prediction_decisionTreeModel_df = pd.DataFrame(data=prediction_decisionTreeModel)
+prediction_MLPModel_df = pd.DataFrame(data=prediction_MLPModel)
 
-predictions = mean_model_calculator([prediction_model1_df, prediction_model2_df, prediction_model3_df])
+predictions = mean_model_calculator([prediction_model1_df, prediction_MLPModel_df])
 
-binary_predictions = predictions >= 0.6
+binary_prediction_model1_df = prediction_model1_df >= 0.7
+
+print("deep learning model f1 score ", " : ",
+          f1_score(y_validate, binary_prediction_model1_df))
+
+
+print("deep learning model f1 score ", " : ",
+          f1_score(y_validate, prediction_MLPModel_df))
+
+binary_predictions = predictions >= 0.7
 
 print("deep learning model f1 score ", " : ",
           f1_score(y_validate, binary_predictions))
