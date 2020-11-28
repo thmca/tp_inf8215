@@ -103,8 +103,11 @@ def submission_predictions(x_all,y_all, test_df):
         metrics=['accuracy']
     )
 
+    #comment fit and save models lines and uncomment load line to load last saved model without having to retrain
     deep_model2.fit(x_all_PCA, y_all, epochs=epochs, batch_size=batch_size)
     deep_model2.save("models/model2")
+    # deep_model2 = keras.models.load_model("models/model1")
+
 
     deep_predictions = deep_model2.predict(test_PCA)
     deep_predictions = deep_predictions > classification_ceiling
