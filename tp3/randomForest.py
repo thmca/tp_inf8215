@@ -10,18 +10,34 @@ def validate_predictions(x_train, y_train, x_validate, y_validate):
 
     rndTree.fit(x_train,y_train)
 
-    RandomForestClassifier(bootstrap=True, class_weight=None, criterion='gini',
-                           max_depth=None, max_features='auto', max_leaf_nodes=None,
-                           min_impurity_decrease=0.0, min_impurity_split=None,
-                           min_samples_leaf=1, min_samples_split=2,
-                           min_weight_fraction_leaf=0.0, n_estimators=100, n_jobs=1,
-                           oob_score=False, random_state=None, verbose=0,
-                           warm_start=False)
+    RandomForestClassifier(n_estimators=100, criterion='gini', max_depth=None, min_samples_split=2,
+                           min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features='auto',
+                           max_leaf_nodes=None, min_impurity_decrease=0.0, min_impurity_split=None,
+                           bootstrap=True, oob_score=False, n_jobs=1, random_state=None, verbose=10,
+                           warm_start=False, class_weight=None, ccp_alpha=0.0, max_samples=None)
 
-    test_score = rndTree.score(x_validate, y_validate)
+    score = rndTree.score(x_validate, y_validate)
 
     predictions = predict(rndTree, x_validate)
 
-    print(f'- Test score - {test_score}')
+    print(f'Random Forest Tree - Accuracy: {score}')
+
+    return predictions
+
+def submission_predictions(x_all,y_all, test_df):
+
+    rndTree = RandomForestClassifier()
+
+    rndTree.fit(x_all, y_all)
+
+    RandomForestClassifier(n_estimators=100, criterion='gini', max_depth=None, min_samples_split=2,
+                           min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features='auto',
+                           max_leaf_nodes=None, min_impurity_decrease=0.0, min_impurity_split=None,
+                           bootstrap=True, oob_score=False, n_jobs=1, random_state=None, verbose=10,
+                           warm_start=False, class_weight=None, ccp_alpha=0.0, max_samples=None)
+
+
+    predictions = predict(rndTree, test_df)
+
 
     return predictions
