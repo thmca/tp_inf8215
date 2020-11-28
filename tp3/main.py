@@ -67,18 +67,18 @@ x_validate = validate_df.iloc[:, 1:(train_df.shape[1] - 1)]
 # prediction_model2 = model2.validate_predictions(x_train, y_train, x_validate, y_validate)
 # prediction_model3 = randomForest.validate_predictions(x_train, y_train, x_validate, y_validate)
 
-# prediction_model1 = model1.submission_predictions(x_all, y_all, test_df)
-# prediction_model2 = model2.submission_predictions(x_all, y_all, test_df)
+prediction_model1 = model1.submission_predictions(x_all, y_all, test_df)
+prediction_model2 = model2.submission_predictions(x_all, y_all, test_df)
 prediction_model3 = randomForest.submission_predictions(x_all, y_all, test_df)
 
 prediction_ceiling = 0.6
 
-# predictions = mean_model_calculator([prediction_model1, prediction_model2, prediction_model3])
+predictions = mean_model_calculator([prediction_model1, prediction_model2, prediction_model3])
 
-# binary_prediction_model1_df = prediction_model1 >= prediction_ceiling
-# binary_prediction_model2_df = prediction_model2 >= prediction_ceiling
-# binary_predictions = predictions >= prediction_ceiling
-#
+binary_prediction_model1_df = prediction_model1 >= prediction_ceiling
+binary_prediction_model2_df = prediction_model2 >= prediction_ceiling
+binary_predictions = predictions >= prediction_ceiling
+
 # print("deep learning model f1 score ", " : ",
 #           f1_score(y_validate, binary_prediction_model1_df))
 #
@@ -86,12 +86,12 @@ prediction_ceiling = 0.6
 # print("deep learning model f1 score ", " : ",
 #           f1_score(y_validate, binary_prediction_model2_df))
 #
-# binary_predictions = predictions >= prediction_ceiling
+#
 # print("combined model f1 score ", " : ",
 #            f1_score(y_validate, binary_predictions))
 
-print(prediction_model3.shape)
-submit(prediction_model3, "random_forest")
+print(binary_predictions.shape)
+submit(binary_predictions, "RF_DNN_DNN")
 
 
 
