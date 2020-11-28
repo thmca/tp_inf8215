@@ -9,6 +9,8 @@ from math import floor
 import model1
 import model2
 import ScikitModel
+import baynes
+import randomForest
 
 def mean_model_calculator(predictions):
     new_frame = pd.concat(predictions, axis=1, sort=False)
@@ -53,14 +55,16 @@ x_train = train_df.iloc[:, 1:(train_df.shape[1] - 1)]
 y_validate = validate_df.iloc[:, (train_df.shape[1] - 1)]
 x_validate = validate_df.iloc[:, 1:(train_df.shape[1] - 1)]
 
-# prediction_model1 = model1.validate_predictions(x_train, y_train, x_validate, y_validate)
-# prediction_model2 = model2.validate_predictions(x_train, y_train, x_validate, y_validate)
-prediction_model1 = model1.submission_predictions(x_all, y_all, test_df)
-prediction_model2 = model2.submission_predictions(x_all, y_all, test_df)
+prediction_model1 = model1.validate_predictions(x_train, y_train, x_validate, y_validate)
+prediction_model2 = model2.validate_predictions(x_train, y_train, x_validate, y_validate)
+#baynes.validate_predictions(x_train, y_train, x_validate, y_validate)
+prediction_model3 = randomForest.validate_predictions(x_train, y_train, x_validate, y_validate)
+#prediction_model1 = model1.submission_predictions(x_all, y_all, test_df)
+#prediction_model2 = model2.submission_predictions(x_all, y_all, test_df)
 
 prediction_ceiling = 0.6
 
-predictions = mean_model_calculator([prediction_model1, prediction_model2])
+predictions = mean_model_calculator([prediction_model1, prediction_model2, prediction_model3])
 
 binary_prediction_model1_df = prediction_model1 >= prediction_ceiling
 binary_prediction_model2_df = prediction_model2 >= prediction_ceiling
@@ -74,10 +78,10 @@ binary_prediction_model2_df = prediction_model2 >= prediction_ceiling
 #
 binary_predictions = predictions >= prediction_ceiling
 #
-# print("deep learning model f1 score ", " : ",
-#           f1_score(y_validate, binary_predictions))
+print("deep learning model f1 score ", " : ",
+           f1_score(y_validate, binary_predictions))
 print(binary_predictions.shape)
-submit(binary_predictions, "combined_models")
+#submit(binary_predictions, "combined_models")
 
 
 
