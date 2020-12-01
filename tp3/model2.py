@@ -61,11 +61,13 @@ def validate_predictions(x_train, y_train, x_validate, y_validate):
 
     # **************************************************************
     deep_model.fit(x_train_PCA, y_train, epochs=epochs, batch_size=batch_size)
+    deep_model.save("models/model2")
+    # deep_model2 = keras.models.load_model("models/model1")
 
     validate_predictions = deep_model.predict(x_validate_PCA)
     prediction_df = pd.DataFrame(data=validate_predictions)
 
-    return prediction_df
+    return prediction_df, deep_model
 
 def submission_predictions(x_all,y_all, test_df):
 
@@ -95,7 +97,7 @@ def submission_predictions(x_all,y_all, test_df):
     epochs = 400
     batch_size = 256
     classification_ceiling = 0.6
-    optimizer = keras.optimizers.Adam(learning_rate=0.002)  # default 0.001 Sets the learning rate for the code bellow
+    optimizer = keras.optimizers.Adam(learning_rate=0.004)  # default 0.001 Sets the learning rate for the code bellow
 
     deep_model2.compile(
         optimizer=optimizer,
@@ -104,9 +106,9 @@ def submission_predictions(x_all,y_all, test_df):
     )
 
     #comment fit and save models lines and uncomment load line to load last saved model without having to retrain
-    # deep_model2.fit(x_all_PCA, y_all, epochs=epochs, batch_size=batch_size)
-    # deep_model2.save("models/model2")
-    deep_model2 = keras.models.load_model("models/model2")
+    deep_model2.fit(x_all_PCA, y_all, epochs=epochs, batch_size=batch_size)
+    deep_model2.save("models/model2")
+    # deep_model2 = keras.models.load_model("models/model2")
 
 
     deep_predictions = deep_model2.predict(test_PCA)

@@ -22,7 +22,7 @@ def validate_predictions(x_train, y_train, x_validate, y_validate):
 
     print(f'Random Forest Tree - Accuracy: {score}')
 
-    return predictions
+    return predictions, rndTree
 
 def submission_predictions(x_all,y_all, test_df):
 
@@ -40,4 +40,4 @@ def submission_predictions(x_all,y_all, test_df):
     predictions = predict(rndTree, test_df)
 
 
-    return predictions
+    return predictions, rndTree
