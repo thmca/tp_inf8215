@@ -23,7 +23,7 @@ def apply_PCA(train_set, validation_set, test_set):
     return new_train, new_validate, new_test
 
 
-def validate_predictions(x_train, x_validate):
+def validate_predictions(x_train, x_validate, y_train):
     # Apply PCA so that we do not need to process all 86 attributes
 
     n_features = x_train.shape[1]
@@ -56,12 +56,11 @@ def validate_predictions(x_train, x_validate):
     )
 
     # You can either load an existing model or call the fil function bellow. (Not both at same time)
-    deep_model = keras.models.load_model("models/model1")
+    # deep_model = keras.models.load_model("models/model1")
 
     # **************************************************************
-    # deep_model.fit(x_train_PCA, y_train, epochs=epochs, batch_size=batch_size)
-    # deep_model.save("models/model1")
-
+    deep_model.fit(x_train, y_train, epochs=epochs, batch_size=batch_size)
+    deep_model.save("models/model1")
 
     validate_predictions = deep_model.predict(x_validate)
     prediction_df = pd.DataFrame(data=validate_predictions)

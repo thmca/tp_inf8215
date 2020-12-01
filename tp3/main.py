@@ -66,13 +66,9 @@ x_validate = validate_df.iloc[:, 1:(train_df.shape[1] - 1)]
 # use pca
 x_train_PCA, x_validate_PCA, test_df_PCA = model1.apply_PCA(x_train, x_validate, test_df)
 
-prediction_model1, dnn1 = model1.validate_predictions(x_train_PCA, x_validate_PCA)
-prediction_model2, dnn2 = model2.validate_predictions(x_train_PCA, x_validate_PCA)
+prediction_model1, dnn1 = model1.validate_predictions(x_train_PCA, x_validate_PCA, y_train)
+prediction_model2, dnn2 = model2.validate_predictions(x_train_PCA, x_validate_PCA, y_train)
 prediction_model3, rf_model = randomForest.validate_predictions(x_train, y_train, x_validate, y_validate)
-
-# prediction_model1 = model1.submission_predictions(x_all, y_all, test_df)
-# prediction_model2 = model2.submission_predictions(x_all, y_all, test_df)
-# prediction_model3 = randomForest.submission_predictions(x_all, y_all, test_df)
 
 prediction_ceiling = 0.6
 
@@ -106,7 +102,7 @@ predictions_mean = mean_model_calculator([predictions1_df, predictions2_df, pred
 
 binary_test_prediction = predictions_mean >= prediction_ceiling
 
-print(binary_predictions.shape)
+print(binary_test_prediction.shape)
 submit(binary_test_prediction, "RF_DNN_DNN_train-test-seeded")
 
 

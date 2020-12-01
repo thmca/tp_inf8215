@@ -43,7 +43,7 @@ idx,0
 41,legitimate
 42,legitimate
 43,phishing
-44,phishing
+44,legitimate
 45,legitimate
 46,legitimate
 47,legitimate
@@ -97,7 +97,7 @@ idx,0
 95,legitimate
 96,legitimate
 97,phishing
-98,legitimate
+98,phishing
 99,phishing
 100,legitimate
 101,legitimate
@@ -124,8 +124,8 @@ idx,0
 122,legitimate
 123,phishing
 124,phishing
-125,legitimate
-126,legitimate
+125,phishing
+126,phishing
 127,phishing
 128,phishing
 129,legitimate
@@ -144,7 +144,7 @@ idx,0
 142,legitimate
 143,phishing
 144,phishing
-145,phishing
+145,legitimate
 146,legitimate
 147,legitimate
 148,legitimate
@@ -216,7 +216,7 @@ idx,0
 214,legitimate
 215,phishing
 216,phishing
-217,phishing
+217,legitimate
 218,phishing
 219,legitimate
 220,phishing
@@ -290,7 +290,7 @@ idx,0
 288,legitimate
 289,phishing
 290,legitimate
-291,legitimate
+291,phishing
 292,phishing
 293,legitimate
 294,legitimate
@@ -397,7 +397,7 @@ idx,0
 395,phishing
 396,phishing
 397,legitimate
-398,phishing
+398,legitimate
 399,legitimate
 400,legitimate
 401,legitimate
@@ -512,7 +512,7 @@ idx,0
 510,legitimate
 511,legitimate
 512,phishing
-513,legitimate
+513,phishing
 514,phishing
 515,phishing
 516,legitimate
@@ -581,7 +581,7 @@ idx,0
 579,phishing
 580,legitimate
 581,phishing
-582,phishing
+582,legitimate
 583,phishing
 584,phishing
 585,legitimate
@@ -728,7 +728,7 @@ idx,0
 726,legitimate
 727,legitimate
 728,legitimate
-729,phishing
+729,legitimate
 730,legitimate
 731,phishing
 732,legitimate
@@ -778,7 +778,7 @@ idx,0
 776,phishing
 777,legitimate
 778,legitimate
-779,legitimate
+779,phishing
 780,phishing
 781,legitimate
 782,legitimate
@@ -803,7 +803,7 @@ idx,0
 801,legitimate
 802,legitimate
 803,legitimate
-804,legitimate
+804,phishing
 805,phishing
 806,phishing
 807,legitimate
@@ -865,7 +865,7 @@ idx,0
 863,phishing
 864,legitimate
 865,phishing
-866,phishing
+866,legitimate
 867,phishing
 868,legitimate
 869,legitimate
@@ -985,7 +985,7 @@ idx,0
 983,phishing
 984,legitimate
 985,legitimate
-986,phishing
+986,legitimate
 987,legitimate
 988,legitimate
 989,legitimate
@@ -1060,7 +1060,7 @@ idx,0
 1058,legitimate
 1059,legitimate
 1060,legitimate
-1061,legitimate
+1061,phishing
 1062,legitimate
 1063,legitimate
 1064,legitimate
@@ -1128,13 +1128,13 @@ idx,0
 1126,phishing
 1127,legitimate
 1128,phishing
-1129,legitimate
+1129,phishing
 1130,legitimate
 1131,phishing
 1132,phishing
-1133,phishing
+1133,legitimate
 1134,legitimate
-1135,legitimate
+1135,phishing
 1136,legitimate
 1137,legitimate
 1138,legitimate
@@ -1374,7 +1374,7 @@ idx,0
 1372,phishing
 1373,legitimate
 1374,legitimate
-1375,phishing
+1375,legitimate
 1376,legitimate
 1377,legitimate
 1378,legitimate
@@ -1386,7 +1386,7 @@ idx,0
 1384,legitimate
 1385,legitimate
 1386,legitimate
-1387,phishing
+1387,legitimate
 1388,legitimate
 1389,phishing
 1390,phishing
@@ -1431,7 +1431,7 @@ idx,0
 1429,phishing
 1430,legitimate
 1431,legitimate
-1432,legitimate
+1432,phishing
 1433,legitimate
 1434,legitimate
 1435,legitimate
@@ -1541,7 +1541,7 @@ idx,0
 1539,legitimate
 1540,phishing
 1541,legitimate
-1542,phishing
+1542,legitimate
 1543,phishing
 1544,legitimate
 1545,legitimate
@@ -1582,7 +1582,7 @@ idx,0
 1580,legitimate
 1581,legitimate
 1582,legitimate
-1583,legitimate
+1583,phishing
 1584,legitimate
 1585,phishing
 1586,legitimate
@@ -1613,7 +1613,7 @@ idx,0
 1611,legitimate
 1612,phishing
 1613,legitimate
-1614,phishing
+1614,legitimate
 1615,legitimate
 1616,legitimate
 1617,legitimate
@@ -1641,7 +1641,7 @@ idx,0
 1639,phishing
 1640,legitimate
 1641,legitimate
-1642,phishing
+1642,legitimate
 1643,legitimate
 1644,phishing
 1645,legitimate
@@ -1770,7 +1770,7 @@ idx,0
 1768,legitimate
 1769,legitimate
 1770,legitimate
-1771,phishing
+1771,legitimate
 1772,legitimate
 1773,legitimate
 1774,legitimate
@@ -1851,7 +1851,7 @@ idx,0
 1849,phishing
 1850,legitimate
 1851,phishing
-1852,legitimate
+1852,phishing
 1853,legitimate
 1854,legitimate
 1855,legitimate
@@ -1945,7 +1945,7 @@ idx,0
 1943,legitimate
 1944,legitimate
 1945,phishing
-1946,phishing
+1946,legitimate
 1947,phishing
 1948,legitimate
 1949,legitimate
@@ -1961,7 +1961,7 @@ idx,0
 1959,legitimate
 1960,phishing
 1961,legitimate
-1962,phishing
+1962,legitimate
 1963,phishing
 1964,legitimate
 1965,phishing
@@ -2129,7 +2129,7 @@ idx,0
 2127,legitimate
 2128,legitimate
 2129,legitimate
-2130,phishing
+2130,legitimate
 2131,legitimate
 2132,legitimate
 2133,legitimate
@@ -2189,9 +2189,9 @@ idx,0
 2187,phishing
 2188,phishing
 2189,legitimate
-2190,legitimate
+2190,phishing
 2191,legitimate
-2192,legitimate
+2192,phishing
 2193,legitimate
 2194,legitimate
 2195,legitimate
@@ -2226,7 +2226,7 @@ idx,0
 2224,legitimate
 2225,legitimate
 2226,legitimate
-2227,phishing
+2227,legitimate
 2228,legitimate
 2229,legitimate
 2230,legitimate
@@ -2273,7 +2273,7 @@ idx,0
 2271,legitimate
 2272,phishing
 2273,legitimate
-2274,legitimate
+2274,phishing
 2275,legitimate
 2276,legitimate
 2277,legitimate
@@ -2319,7 +2319,7 @@ idx,0
 2317,legitimate
 2318,phishing
 2319,legitimate
-2320,phishing
+2320,legitimate
 2321,legitimate
 2322,legitimate
 2323,phishing
@@ -2507,7 +2507,7 @@ idx,0
 2505,phishing
 2506,phishing
 2507,phishing
-2508,legitimate
+2508,phishing
 2509,legitimate
 2510,phishing
 2511,phishing
@@ -2519,7 +2519,7 @@ idx,0
 2517,phishing
 2518,legitimate
 2519,legitimate
-2520,phishing
+2520,legitimate
 2521,phishing
 2522,phishing
 2523,phishing
@@ -2562,7 +2562,7 @@ idx,0
 2560,legitimate
 2561,legitimate
 2562,legitimate
-2563,legitimate
+2563,phishing
 2564,legitimate
 2565,legitimate
 2566,legitimate
@@ -2612,8 +2612,8 @@ idx,0
 2610,legitimate
 2611,legitimate
 2612,phishing
-2613,phishing
-2614,legitimate
+2613,legitimate
+2614,phishing
 2615,legitimate
 2616,phishing
 2617,legitimate
@@ -2621,8 +2621,8 @@ idx,0
 2619,legitimate
 2620,legitimate
 2621,legitimate
-2622,phishing
-2623,legitimate
+2622,legitimate
+2623,phishing
 2624,legitimate
 2625,legitimate
 2626,phishing
@@ -2649,7 +2649,7 @@ idx,0
 2647,legitimate
 2648,legitimate
 2649,legitimate
-2650,phishing
+2650,legitimate
 2651,legitimate
 2652,legitimate
 2653,legitimate
@@ -2710,7 +2710,7 @@ idx,0
 2708,legitimate
 2709,phishing
 2710,legitimate
-2711,legitimate
+2711,phishing
 2712,legitimate
 2713,phishing
 2714,phishing
@@ -2767,7 +2767,7 @@ idx,0
 2765,phishing
 2766,legitimate
 2767,legitimate
-2768,phishing
+2768,legitimate
 2769,legitimate
 2770,legitimate
 2771,legitimate
@@ -2788,7 +2788,7 @@ idx,0
 2786,legitimate
 2787,phishing
 2788,legitimate
-2789,legitimate
+2789,phishing
 2790,legitimate
 2791,legitimate
 2792,phishing
@@ -2809,7 +2809,7 @@ idx,0
 2807,legitimate
 2808,legitimate
 2809,legitimate
-2810,legitimate
+2810,phishing
 2811,phishing
 2812,legitimate
 2813,legitimate
@@ -2856,7 +2856,7 @@ idx,0
 2854,phishing
 2855,legitimate
 2856,legitimate
-2857,phishing
+2857,legitimate
 2858,legitimate
 2859,legitimate
 2860,phishing
@@ -3180,8 +3180,8 @@ idx,0
 3178,legitimate
 3179,legitimate
 3180,legitimate
-3181,legitimate
-3182,legitimate
+3181,phishing
+3182,phishing
 3183,legitimate
 3184,legitimate
 3185,legitimate
@@ -3257,7 +3257,7 @@ idx,0
 3255,legitimate
 3256,legitimate
 3257,legitimate
-3258,legitimate
+3258,phishing
 3259,phishing
 3260,phishing
 3261,phishing
@@ -3276,7 +3276,7 @@ idx,0
 3274,legitimate
 3275,legitimate
 3276,legitimate
-3277,legitimate
+3277,phishing
 3278,legitimate
 3279,legitimate
 3280,legitimate
@@ -3308,7 +3308,7 @@ idx,0
 3306,legitimate
 3307,legitimate
 3308,legitimate
-3309,legitimate
+3309,phishing
 3310,legitimate
 3311,legitimate
 3312,legitimate
@@ -3341,7 +3341,7 @@ idx,0
 3339,legitimate
 3340,phishing
 3341,legitimate
-3342,phishing
+3342,legitimate
 3343,legitimate
 3344,legitimate
 3345,legitimate
