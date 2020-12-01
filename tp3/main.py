@@ -63,8 +63,11 @@ x_train = train_df.iloc[:, 1:(train_df.shape[1] - 1)]
 y_validate = validate_df.iloc[:, (train_df.shape[1] - 1)]
 x_validate = validate_df.iloc[:, 1:(train_df.shape[1] - 1)]
 
-prediction_model1, dnn1 = model1.validate_predictions(x_train, y_train, x_validate, y_validate)
-prediction_model2, dnn2 = model2.validate_predictions(x_train, y_train, x_validate, y_validate)
+# use pca
+x_train_PCA, x_validate_PCA, test_df_PCA = model1.apply_PCA(x_train, x_validate, test_df)
+
+prediction_model1, dnn1 = model1.validate_predictions(x_train_PCA, x_validate_PCA)
+prediction_model2, dnn2 = model2.validate_predictions(x_train_PCA, x_validate_PCA)
 prediction_model3, rf_model = randomForest.validate_predictions(x_train, y_train, x_validate, y_validate)
 
 # prediction_model1 = model1.submission_predictions(x_all, y_all, test_df)
@@ -91,11 +94,15 @@ print("combined model f1 score ", " : ",
            f1_score(y_validate, binary_predictions))
 
 
-predictions1 = predict(dnn1, x_all)
-predictions2 = predict(dnn2, x_all)
-predictions3 = predict(rf_model, x_all)
+predictions1 = dnn1.predict(test_df_PCA)
+predictions1_df = pd.DataFrame(data=predictions1)
 
-predictions_mean = mean_model_calculator([predictions1, predictions2, predictions3])
+predictions2 = dnn2.predict(test_df_PCA)
+predictions2_df = pd.DataFrame(data=predictions2)
+
+predictions3_df = predict(rf_model, test_df)
+
+predictions_mean = mean_model_calculator([predictions1_df, predictions2_df, predictions3_df])
 
 binary_test_prediction = predictions_mean >= prediction_ceiling
 

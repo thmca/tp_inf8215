@@ -12,21 +12,21 @@ def normal_scaling(train_set, validation_set):
     return new_train, new_validate
 
 
-def apply_PCA(train_set, validation_set):
+def apply_PCA(train_set, validation_set, test_set):
     train_scaled, validate_scaled = normal_scaling(train_set, validation_set)
     pca = PCA(n_components='mle')
     pca.fit(train_scaled)
     new_train = pca.transform(train_scaled)
     new_validate = pca.transform(validate_scaled)
+    new_test = pca.transform(test_set)
 
-    return new_train, new_validate
+    return new_train, new_validate, new_test
 
 
-def validate_predictions(x_train, y_train, x_validate, y_validate):
+def validate_predictions(x_train, x_validate):
     # Apply PCA so that we do not need to process all 86 attributes
-    x_train_PCA, x_validate_PCA = apply_PCA(x_train, x_validate)
 
-    n_features = x_train_PCA.shape[1]
+    n_features = x_train.shape[1]
 
     # Model structure
     # possible activations : tanh, relu, elu, selu
@@ -56,14 +56,14 @@ def validate_predictions(x_train, y_train, x_validate, y_validate):
     )
 
     # You can either load an existing model or call the fil function bellow. (Not both at same time)
-    # deep_model = keras.models.load_model("models/5L_200E_2B_f199")
+    deep_model = keras.models.load_model("models/model1")
 
     # **************************************************************
-    deep_model.fit(x_train_PCA, y_train, epochs=epochs, batch_size=batch_size)
-    deep_model.save("models/model1")
-    # deep_model2 = keras.models.load_model("models/model1")
+    # deep_model.fit(x_train_PCA, y_train, epochs=epochs, batch_size=batch_size)
+    # deep_model.save("models/model1")
 
-    validate_predictions = deep_model.predict(x_validate_PCA)
+
+    validate_predictions = deep_model.predict(x_validate)
     prediction_df = pd.DataFrame(data=validate_predictions)
 
     return prediction_df, deep_model
