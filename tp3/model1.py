@@ -24,7 +24,6 @@ def apply_PCA(train_set, validation_set, test_set):
 
 
 def validate_predictions(x_train, x_validate, y_train):
-    # Apply PCA so that we do not need to process all 86 attributes
 
     n_features = x_train.shape[1]
 
@@ -35,17 +34,16 @@ def validate_predictions(x_train, x_validate, y_train):
 
     deep_model = keras.Sequential()
     deep_model.add(keras.Input(shape=(n_features,)))
-    deep_model.add(keras.layers.Dense(16, activation='selu'))
-    deep_model.add(keras.layers.Dropout(0.1))
     deep_model.add(keras.layers.Dense(16, activation='relu'))
-    deep_model.add(keras.layers.Dropout(0.1))
-    deep_model.add(keras.layers.Dense(16, activation='tanh'))
+    deep_model.add(keras.layers.Dropout(0.2))
+    deep_model.add(keras.layers.Dense(16, activation='relu'))
+    deep_model.add(keras.layers.Dropout(0.2))
     deep_model.add(keras.layers.Dense(1, activation='sigmoid'))
     deep_model.summary()
 
     # Model parameters
     epochs = 150
-    batch_size = 128
+    batch_size = 64
     classification_ceiling = 0.6
     optimizer = keras.optimizers.Adam(learning_rate=0.002)  # default 0.001 Sets the learning rate for the code bellow
 
@@ -86,6 +84,7 @@ def submission_predictions(x_all,y_all, test_df):
     deep_model2.add(keras.layers.Dense(16, activation='relu'))
     deep_model2.add(keras.layers.Dropout(0.1))
     deep_model2.add(keras.layers.Dense(16, activation='tanh'))
+    deep_model2.add(keras.layers.Dropout(0.1))
     deep_model2.add(keras.layers.Dense(1, activation='sigmoid'))
     deep_model2.summary()
 

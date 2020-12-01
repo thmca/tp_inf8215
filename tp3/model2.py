@@ -34,19 +34,18 @@ def validate_predictions(x_train, x_validate, y_train):
 
     deep_model = keras.Sequential()
     deep_model.add(keras.Input(shape=(n_features,)))
-    deep_model.add(keras.layers.Dense(64, activation='relu'))
-    deep_model.add(keras.layers.Dropout(0.1))
-    deep_model.add(keras.layers.Dense(64, activation='relu'))
-    deep_model.add(keras.layers.Dropout(0.1))
-    deep_model.add(keras.layers.Dense(64, activation='relu'))
-    deep_model.add(keras.layers.Dropout(0.1))
-    deep_model.add(keras.layers.Dense(64, activation='tanh'))
+    deep_model.add(keras.layers.Dense(16, activation='selu'))
+    deep_model.add(keras.layers.Dropout(0.2))
+    deep_model.add(keras.layers.Dense(32, activation='selu'))
+    deep_model.add(keras.layers.Dropout(0.2))
+    deep_model.add(keras.layers.Dense(16, activation='tanh'))
+    deep_model.add(keras.layers.Dropout(0.2))
     deep_model.add(keras.layers.Dense(1, activation='sigmoid'))
     deep_model.summary()
 
     # Model parameters
-    epochs = 400
-    batch_size = 256
+    epochs = 200
+    batch_size = 128
     classification_ceiling = 0.6
     optimizer = keras.optimizers.Adam(learning_rate=0.004)  # default 0.001 Sets the learning rate for the code bellow
 
