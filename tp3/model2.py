@@ -56,11 +56,11 @@ def validate_predictions(x_train, x_validate, y_train):
     )
 
     # You can either load an existing model or call the fil function bellow. (Not both at same time)
-    # deep_model = keras.models.load_model("models/model2")
+    deep_model = keras.models.load_model("models/model2")
 
     # **************************************************************
-    deep_model.fit(x_train, y_train, epochs=epochs, batch_size=batch_size)
-    deep_model.save("models/model2")
+    # deep_model.fit(x_train, y_train, epochs=epochs, batch_size=batch_size)
+    # deep_model.save("models/model2")
 
     validate_predictions = deep_model.predict(x_validate)
     prediction_df = pd.DataFrame(data=validate_predictions)

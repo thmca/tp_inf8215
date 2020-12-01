@@ -23,11 +23,11 @@ import randomForest
 def mean_model_calculator(predictions):
     new_frame = pd.concat(predictions, axis=1, sort=False)
     df = new_frame.mean(axis=1)
-    return df
+    return df.to_frame()
 
 def submit(predictions_dataframe, name):
     submission_file = open("data/" + name + ".csv", "w")
-    predictions_dataframe.columns = ["status"]
+    predictions_dataframe.columns = ['status']
     predictions_dataframe.index.name = "idx"
     maping = {1: 'phishing', 0: 'legitimate'}
     predictions_dataframe = predictions_dataframe.replace(maping)
@@ -70,7 +70,7 @@ prediction_model1, dnn1 = model1.validate_predictions(x_train_PCA, x_validate_PC
 prediction_model2, dnn2 = model2.validate_predictions(x_train_PCA, x_validate_PCA, y_train)
 prediction_model3, rf_model = randomForest.validate_predictions(x_train, y_train, x_validate, y_validate)
 
-prediction_ceiling = 0.5
+prediction_ceiling = 0.6
 
 predictions = mean_model_calculator([prediction_model1, prediction_model2, prediction_model3])
 
@@ -98,7 +98,7 @@ predictions2_df = pd.DataFrame(data=predictions2)
 
 predictions3_df = predict(rf_model, test_df)
 
-predictions_mean = mean_model_calculator([predictions1_df, predictions2_df]) #, predictions3_df])
+predictions_mean = mean_model_calculator([predictions1_df, predictions2_df, predictions3_df])
 
 binary_test_prediction = predictions_mean >= prediction_ceiling
 
