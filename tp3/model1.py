@@ -42,7 +42,7 @@ def validate_predictions(x_train, x_validate, y_train):
     deep_model.summary()
 
     # Model parameters
-    epochs = 150
+    epochs = 75
     batch_size = 64
     classification_ceiling = 0.6
     optimizer = keras.optimizers.Adam(learning_rate=0.002)  # default 0.001 Sets the learning rate for the code bellow
@@ -54,11 +54,11 @@ def validate_predictions(x_train, x_validate, y_train):
     )
 
     # You can either load an existing model or call the fil function bellow. (Not both at same time)
-    deep_model = keras.models.load_model("models/model1")
+    # deep_model = keras.models.load_model("models/model1")
 
     # **************************************************************
-    # deep_model.fit(x_train, y_train, epochs=epochs, batch_size=batch_size)
-    # deep_model.save("models/model1")
+    deep_model.fit(x_train, y_train, epochs=epochs, batch_size=batch_size)
+    deep_model.save("models/model1")
 
     validate_predictions = deep_model.predict(x_validate)
     prediction_df = pd.DataFrame(data=validate_predictions)
