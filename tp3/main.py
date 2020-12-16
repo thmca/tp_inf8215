@@ -102,8 +102,8 @@ predictions_mean = mean_model_calculator([predictions1_df, predictions3_df])
 
 binary_test_prediction = predictions_mean >= prediction_ceiling
 
-print(binary_test_prediction.shape)
-submit(binary_test_prediction, "RF_DNN_DNN_train-test-seeded")
+print(predictions3_df.shape)
+submit(predictions3_df, "new_random_forest")
 
 
 
