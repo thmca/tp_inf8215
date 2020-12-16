@@ -51,7 +51,9 @@ domain_age_mean = floor(pd.DataFrame.mean(data_df["domain_age"]))
 data_df["domain_age"] = data_df["domain_age"].replace(np.nan, domain_age_mean)
 
 # This can be used when validation is needed
-train_df, validate_df = train_test_split(data_df, test_size=0.15)
+train_df, validate_df = train_test_split(data_df, test_size=0.2)
+print("train : ", train_df["status"].value_counts())
+print("validate : ", validate_df["status"].value_counts())
 
 # This is used when we want to use the entire train csv for submission
 y_all = data_df.iloc[:, (data_df.shape[1] - 1)]
@@ -102,8 +104,10 @@ predictions_mean = mean_model_calculator([predictions1_df, predictions3_df])
 
 binary_test_prediction = predictions_mean >= prediction_ceiling
 
-print(predictions3_df.shape)
-submit(predictions3_df, "new_random_forest")
+predictions1_df = predictions1_df >= prediction_ceiling
+
+print(predictions1_df.shape)
+submit(predictions1_df, "DNN")
 
 
 

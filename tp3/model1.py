@@ -38,6 +38,8 @@ def validate_predictions(x_train, x_validate, y_train):
     deep_model.add(keras.layers.Dropout(0.2))
     deep_model.add(keras.layers.Dense(16, activation='relu'))
     deep_model.add(keras.layers.Dropout(0.2))
+    deep_model.add(keras.layers.Dense(16, activation='relu'))
+    deep_model.add(keras.layers.Dropout(0.2))
     deep_model.add(keras.layers.Dense(1, activation='sigmoid'))
     deep_model.summary()
 
@@ -54,11 +56,11 @@ def validate_predictions(x_train, x_validate, y_train):
     )
 
     # You can either load an existing model or call the fil function bellow. (Not both at same time)
-    deep_model = keras.models.load_model("models/model1")
+    # deep_model = keras.models.load_model("models/model1")
 
     # **************************************************************
-    # deep_model.fit(x_train, y_train, epochs=epochs, batch_size=batch_size)
-    # deep_model.save("models/model1")
+    deep_model.fit(x_train, y_train, epochs=epochs, batch_size=batch_size)
+    deep_model.save("models/model1")
 
     validate_predictions = deep_model.predict(x_validate)
     prediction_df = pd.DataFrame(data=validate_predictions)
