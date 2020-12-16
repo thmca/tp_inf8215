@@ -51,7 +51,7 @@ domain_age_mean = floor(pd.DataFrame.mean(data_df["domain_age"]))
 data_df["domain_age"] = data_df["domain_age"].replace(np.nan, domain_age_mean)
 
 # This can be used when validation is needed
-train_df, validate_df = train_test_split(data_df, test_size=0.2, random_state=8)
+train_df, validate_df = train_test_split(data_df, test_size=0.15)
 
 # This is used when we want to use the entire train csv for submission
 y_all = data_df.iloc[:, (data_df.shape[1] - 1)]
@@ -67,23 +67,23 @@ x_validate = validate_df.iloc[:, 1:(train_df.shape[1] - 1)]
 x_train_PCA, x_validate_PCA, test_df_PCA = model1.apply_PCA(x_train, x_validate, test_df)
 
 prediction_model1, dnn1 = model1.validate_predictions(x_train_PCA, x_validate_PCA, y_train)
-prediction_model2, dnn2 = model2.validate_predictions(x_train_PCA, x_validate_PCA, y_train)
+# prediction_model2, dnn2 = model2.validate_predictions(x_train_PCA, x_validate_PCA, y_train)
 prediction_model3, rf_model = randomForest.validate_predictions(x_train, y_train, x_validate, y_validate)
 
-prediction_ceiling = 0.6
+prediction_ceiling = 0.55
 
-predictions = mean_model_calculator([prediction_model1, prediction_model2, prediction_model3])
+predictions = mean_model_calculator([prediction_model1, prediction_model3])
 
 binary_prediction_model1_df = prediction_model1 >= prediction_ceiling
-binary_prediction_model2_df = prediction_model2 >= prediction_ceiling
+# binary_prediction_model2_df = prediction_model2 >= prediction_ceiling
 binary_predictions = predictions >= prediction_ceiling
 
 print("deep learning model f1 score ", " : ",
           f1_score(y_validate, binary_prediction_model1_df))
 
 
-print("deep learning model f1 score ", " : ",
-          f1_score(y_validate, binary_prediction_model2_df))
+# print("deep learning model f1 score ", " : ",
+#           f1_score(y_validate, binary_prediction_model2_df))
 
 
 print("combined model f1 score ", " : ",
@@ -93,12 +93,12 @@ print("combined model f1 score ", " : ",
 predictions1 = dnn1.predict(test_df_PCA)
 predictions1_df = pd.DataFrame(data=predictions1)
 
-predictions2 = dnn2.predict(test_df_PCA)
-predictions2_df = pd.DataFrame(data=predictions2)
+# predictions2 = dnn2.predict(test_df_PCA)
+# predictions2_df = pd.DataFrame(data=predictions2)
 
 predictions3_df = predict(rf_model, test_df)
 
-predictions_mean = mean_model_calculator([predictions1_df, predictions2_df, predictions3_df])
+predictions_mean = mean_model_calculator([predictions1_df, predictions3_df])
 
 binary_test_prediction = predictions_mean >= prediction_ceiling
 
