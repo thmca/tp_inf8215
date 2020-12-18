@@ -25,7 +25,7 @@ def validate_predictions(x_train, x_validate, y_train):
     deep_model.summary()
 
     # Model parameters
-    epochs = 200
+    epochs = 250
     batch_size = 64
     optimizer = keras.optimizers.Adam(learning_rate=0.002)  # default 0.001 Sets the learning rate for the code bellow
 
