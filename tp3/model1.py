@@ -19,7 +19,7 @@ def validate_predictions(x_train, x_validate, y_train):
     deep_model.add(keras.layers.Dropout(0.1))
     deep_model.add(keras.layers.Dense(32, activation='relu'))
     deep_model.add(keras.layers.Dropout(0.1))
-    deep_model.add(keras.layers.Dense(16, activation='tanh'))
+    deep_model.add(keras.layers.Dense(16, activation='relu'))
     deep_model.add(keras.layers.Dropout(0.1))
     deep_model.add(keras.layers.Dense(1, activation='sigmoid'))
     deep_model.summary()
