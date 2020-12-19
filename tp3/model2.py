@@ -3,8 +3,11 @@ from tensorflow import keras
 
 
 def validate_predictions(x_train, x_validate, y_train):
-    # Apply PCA so that we do not need to process all 86 attributes
 
+    callback = keras.callbacks.EarlyStopping(
+        monitor='loss', min_delta=0.001, patience=10, verbose=0,
+        mode='auto', baseline=None, restore_best_weights=True
+    )
 
     n_features = x_train.shape[1]
 
@@ -15,21 +18,17 @@ def validate_predictions(x_train, x_validate, y_train):
 
     deep_model = keras.Sequential()
     deep_model.add(keras.Input(shape=(n_features,)))
-    deep_model.add(keras.layers.Dense(16, activation='selu'))
+    deep_model.add(keras.layers.Dense(100, activation='selu'))
     deep_model.add(keras.layers.Dropout(0.1))
-    deep_model.add(keras.layers.Dense(32, activation='selu'))
-    deep_model.add(keras.layers.Dropout(0.1))
-    deep_model.add(keras.layers.Dense(32, activation='selu'))
-    deep_model.add(keras.layers.Dropout(0.1))
-    deep_model.add(keras.layers.Dense(16, activation='tanh'))
+    deep_model.add(keras.layers.Dense(100, activation='selu'))
     deep_model.add(keras.layers.Dropout(0.1))
     deep_model.add(keras.layers.Dense(1, activation='sigmoid'))
     deep_model.summary()
 
     # Model parameters
-    epochs = 250
-    batch_size = 128
-    optimizer = keras.optimizers.Adam(learning_rate=0.006)  # default 0.001 Sets the learning rate for the code bellow
+    epochs = 200
+    batch_size = 8
+    optimizer = keras.optimizers.Adam(learning_rate=0.0001)  # default 0.001 Sets the learning rate for the code bellow
 
     deep_model.compile(
         optimizer=optimizer,
@@ -38,11 +37,11 @@ def validate_predictions(x_train, x_validate, y_train):
     )
 
     # You can either load an existing model or call the fil function bellow. (Not both at same time)
-    deep_model = keras.models.load_model("models/model2")
+    # deep_model = keras.models.load_model("models/model2")
 
     # **************************************************************
-    # deep_model.fit(x_train, y_train, epochs=epochs, batch_size=batch_size)
-    # deep_model.save("models/model2")
+    deep_model.fit(x_train, y_train, epochs=epochs, batch_size=batch_size,  callbacks=[callback])
+    deep_model.save("models/model2")
 
     validate_predictions = deep_model.predict(x_validate)
     prediction_df = pd.DataFrame(data=validate_predictions)

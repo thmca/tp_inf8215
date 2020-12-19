@@ -2,9 +2,9 @@
 from numpy.random import seed
 seed(1)
 from tensorflow import random as tf_random
-tf_random.set_seed(2)
+tf_random.set_seed(1)
 import random as py_random
-py_random.seed(3)
+py_random.seed(1)
 
 import numpy as np
 from sklearn import tree, neural_network
@@ -73,7 +73,7 @@ domain_age_mean = floor(pd.DataFrame.mean(data_df["domain_age"]))
 data_df["domain_age"] = data_df["domain_age"].replace(np.nan, domain_age_mean)
 
 # This can be used when validation is needed
-train_df, validate_df = train_test_split(data_df, test_size=0.15)
+train_df, validate_df = train_test_split(data_df, test_size=0.2)
 
 
 # This is used when we want to use the entire train csv for submission
