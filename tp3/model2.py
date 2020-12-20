@@ -5,7 +5,7 @@ from tensorflow import keras
 def validate_predictions(x_train, x_validate, y_train):
 
     callback = keras.callbacks.EarlyStopping(
-        monitor='loss', min_delta=0.001, patience=10, verbose=0,
+        monitor='loss', min_delta=0.001, patience=20, verbose=0,
         mode='auto', baseline=None, restore_best_weights=True
     )
 
@@ -20,14 +20,16 @@ def validate_predictions(x_train, x_validate, y_train):
     deep_model.add(keras.Input(shape=(n_features,)))
     deep_model.add(keras.layers.Dense(100, activation='selu'))
     deep_model.add(keras.layers.Dropout(0.1))
+    deep_model.add(keras.layers.Dense(50, activation='selu'))
+    deep_model.add(keras.layers.Dropout(0.1))
     deep_model.add(keras.layers.Dense(100, activation='selu'))
     deep_model.add(keras.layers.Dropout(0.1))
     deep_model.add(keras.layers.Dense(1, activation='sigmoid'))
     deep_model.summary()
 
     # Model parameters
-    epochs = 200
-    batch_size = 8
+    epochs = 500
+    batch_size = 128
     optimizer = keras.optimizers.Adam(learning_rate=0.0001)  # default 0.001 Sets the learning rate for the code bellow
 
     deep_model.compile(

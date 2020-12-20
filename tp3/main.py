@@ -128,10 +128,8 @@ predictions1_df = predictions1_df >= prediction_ceiling
 predictions2_df = predictions2_df >= prediction_ceiling
 
 
-print(predictions1_df.shape)
-submit(predictions1_df, "DNN")
-submit(predictions3_df, "RF")
-submit(binary_test_prediction, "RF_DNN")
+print(binary_test_prediction.shape)
+submit(binary_test_prediction, "RF_DNN_DNN")
 
 print("Data \n ", data_df["status"].value_counts())
 print("train \n ", train_df["status"].value_counts())
