@@ -40,4 +40,4 @@ def submission_predictions(x_all,y_all, test_df):
     predictions = predict(rndTree, test_df)
 
 
-    return predictions, rndTree
+    return predictions
